@@ -105,7 +105,10 @@
   @keyframes zzz { 0% { transform: translate(0, 0) rotate(-8deg); opacity: 0; } 20% { opacity: .9; } 100% { transform: translate(46px, -86px) rotate(10deg); opacity: 0; } }
   .paused .zzz span, .paused .caret.rest { animation-play-state: paused; }
 
-  .nav.mg-glass-3, .strip.mg-glass-3, form.mg-glass-2 { border: 1px solid rgba(255,255,255,.22); background-clip: padding-box; }
+  .nav.mg-glass-3, .strip.mg-glass-3, form.mg-glass-2 { -webkit-backdrop-filter: none; backdrop-filter: none; border: 0; background: rgba(14,14,14,.78); box-shadow: 0 0 0 1px rgba(255,255,255,.16), 0 14px 44px rgba(0,0,0,.45); }
+  .nav.mg-glass-3::before, .nav.mg-glass-3::after, .strip.mg-glass-3::before, .strip.mg-glass-3::after, form.mg-glass-2::before, form.mg-glass-2::after { content: none; }
+  #contact-form .mg-field { -webkit-backdrop-filter: none; backdrop-filter: none; border: 0; background: rgba(255,255,255,.06); box-shadow: 0 0 0 1px rgba(255,255,255,.2); transition: box-shadow .16s ease, background .16s ease; }
+  #contact-form .mg-field:focus-within { background: rgba(255,255,255,.09); box-shadow: 0 0 0 2px #fff; outline: none; }
   /* Summary strip */
   .strip { border-radius: 26px; padding: 8px; display: grid; grid-template-columns: repeat(4, 1fr) auto; align-items: stretch; }
   .tile { position: relative; display: block; padding: 18px 22px 16px; border-radius: 20px; transition: background .16s ease, transform .16s var(--enter); }
@@ -122,7 +125,7 @@
   @keyframes spin { to { transform: rotate(360deg); } }
   .verdict { display: flex; flex-direction: column; justify-content: center; gap: 8px; padding: 12px 20px 12px 26px; min-width: 220px; border-left: 1px solid var(--rule); margin: 10px 0; }
   .verdict output { font-family: var(--mono); font-size: 12px; letter-spacing: .3px; color: var(--ink-2); min-height: 1.4em; white-space: nowrap; }
-  .pill-btn { align-self: flex-start; font-family: var(--mono); font-size: 12px; letter-spacing: .3px; white-space: nowrap; color: #fff; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.28); border-radius: 999px; padding: 10px 16px; min-height: 44px; display: inline-flex; align-items: center; cursor: pointer; transition: background .16s ease, transform .16s var(--enter); }
+  .pill-btn { align-self: flex-start; font-family: var(--mono); font-size: 12px; letter-spacing: .3px; white-space: nowrap; color: #fff; background: rgba(255,255,255,.1); border: 0; box-shadow: 0 0 0 1px rgba(255,255,255,.26); border-radius: 999px; padding: 10px 16px; min-height: 44px; display: inline-flex; align-items: center; cursor: pointer; transition: background .16s ease, transform .16s var(--enter); }
   .pill-btn:hover { background: rgba(255,255,255,.2); }
   .pill-btn:active { transform: scale(.97); }
   .pill-btn[disabled] { opacity: .6; cursor: default; }
@@ -170,13 +173,13 @@
   .project h3 { margin-top: 10px; }
   .facts { margin: 18px 0 4px; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 8px 22px; font-family: var(--mono); font-size: 13px; color: var(--ink-2); }
   .facts b { color: #fff; font-weight: 500; }
-  .demo { border-radius: 18px; overflow: hidden; border: 1px solid rgba(255,255,255,.2); background: #0c0c0c; box-shadow: 0 30px 80px rgba(0,0,0,.55); }
+  .demo { border-radius: 18px; overflow: hidden; border: 0; background: #0c0c0c; box-shadow: 0 0 0 1px rgba(255,255,255,.18), 0 30px 80px rgba(0,0,0,.55); }
   .demo:focus-visible { outline: 2px solid #fff; outline-offset: 4px; border-radius: 18px; }
   .demo__bar { display: flex; align-items: center; gap: 14px; padding: 10px 14px; background: #181818; border-bottom: 1px solid rgba(255,255,255,.1); min-height: 40px; }
   .demo__bar .mono { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .dots3 { display: flex; gap: 6px; flex: none; }
   .dots3 i { width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,.25); }
-  .pill-btn[aria-pressed="true"] { background: #fff; color: #000; border-color: #fff; }
+  .pill-btn[aria-pressed="true"] { background: #fff; color: #000; box-shadow: 0 0 0 1px #fff; }
   .range { -webkit-appearance: none; appearance: none; flex: 1; min-width: 0; height: 44px; margin: 0; background: transparent; cursor: pointer; }
   .range::-webkit-slider-runnable-track { height: 4px; border-radius: 4px; background: rgba(255,255,255,.28); }
   .range::-moz-range-track { height: 4px; border-radius: 4px; background: rgba(255,255,255,.28); }
@@ -187,7 +190,7 @@
   /* Ridgeline: a snapshot that turns into the live site */
   .frame { position: relative; aspect-ratio: 620 / 469; background: #fff; }
   .frame img, .frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; object-fit: cover; object-position: top left; }
-  .frame__go { position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); background: #000; border-color: #000; box-shadow: 0 10px 30px rgba(0,0,0,.4); }
+  .frame__go { position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); background: #000; box-shadow: 0 10px 30px rgba(0,0,0,.4); }
   .frame__go:hover { background: #222; }
   .frame__go:active { transform: translateX(-50%) scale(.97); }
   .demo__tabs { display: flex; gap: 8px; padding: 10px 12px; overflow-x: auto; background: #111; border-top: 1px solid rgba(255,255,255,.1); }
@@ -222,27 +225,57 @@
   .seg { display: flex; gap: 6px; flex-wrap: wrap; }
   .seg .pill-btn { min-height: 40px; padding: 8px 14px; }
 
-  /* RC car cockpit and visualizer */
-  .rc__view, .viz__view { position: relative; aspect-ratio: 16 / 10; background: #000; }
+  /* RC car cockpit: same palette, panels and gauges as the real cockpit page. */
+  .rc__view, .viz__view { position: relative; aspect-ratio: 16 / 10; background: #000; overflow: hidden; }
   .rc__view canvas, .viz__view canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-  .rc__hud { position: absolute; inset: 10px 12px auto 12px; display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 11px; color: rgba(255,255,255,.9); text-shadow: 0 1px 6px #000; pointer-events: none; }
-  .rc__hud b { font-weight: 500; color: var(--accent); }
-  .rc__hud span:first-child { color: #fff; }
-  .rc__auto { position: absolute; left: 12px; top: 44px; font-size: 11px; color: rgba(255,255,255,.85); text-shadow: 0 1px 6px #000; pointer-events: none; transition: opacity .3s ease; }
+  .viz__view canvas[hidden] { display: none; }
+  .rc__view { --amber: #f2cc0c; --cyan: #38d0ff; --danger: #ff3b30; --hair: rgba(255,255,255,.14); font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; color: #eaf2f6; }
+  .rc__fx { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(130% 90% at 50% 50%, transparent 55%, rgba(0,0,0,.7) 100%); }
+  .rchud { position: absolute; inset: 0; pointer-events: none; }
+  .rc-panel { position: absolute; background: rgba(7,11,14,.62); border: 1px solid var(--hair); border-radius: 10px; padding: 8px 10px; }
+  .rc-cluster { top: 10px; left: 10px; display: flex; align-items: center; gap: 10px; }
+  .rc-gear { font-weight: 800; font-size: 36px; line-height: .82; color: var(--amber); text-shadow: 0 0 18px rgba(242,204,12,.35); min-width: 44px; text-align: center; }
+  .rc-gear.rev { color: var(--danger); text-shadow: 0 0 18px rgba(255,59,48,.5); }
+  .rc-meta { display: flex; flex-direction: column; gap: 3px; }
+  .rc-drv { font-size: 12px; letter-spacing: .04em; color: var(--cyan); }
+  .rc-sub { font-size: 9px; color: #8da0ab; letter-spacing: .12em; text-transform: uppercase; }
+  .rc-status { top: 10px; right: 10px; min-width: 150px; }
+  .rc-row { display: flex; align-items: center; gap: 7px; margin: 2px 0; font-size: 11px; font-variant-numeric: tabular-nums; }
+  .rc-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 9px var(--cyan); flex: none; }
+  .rc-cam { margin-left: auto; font-weight: 700; letter-spacing: .14em; color: var(--cyan); }
+  .rc-cam.front { color: var(--danger); }
+  .rc-muted { color: #8da0ab; }
+  .rc-right { margin-left: auto; }
+  .rc-wifi { display: inline-flex; align-items: flex-end; gap: 2px; height: 12px; }
+  .rc-wifi i { width: 3px; background: var(--cyan); border-radius: 1px; box-shadow: 0 0 6px rgba(56,208,255,.5); }
+  .rc-wifi i:nth-child(1) { height: 4px; } .rc-wifi i:nth-child(2) { height: 7px; } .rc-wifi i:nth-child(3) { height: 10px; } .rc-wifi i:nth-child(4) { height: 12px; }
+  .rc-rev { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); color: var(--danger); font-weight: 800; letter-spacing: .34em; font-size: 12px; text-shadow: 0 0 14px rgba(255,59,48,.6); opacity: 0; transition: opacity .15s; border: 1px solid rgba(255,59,48,.5); border-radius: 999px; padding: 5px 12px; background: rgba(40,0,0,.45); }
+  .rc-rev.on { opacity: 1; animation: rcblink 1s infinite; }
+  @keyframes rcblink { 50% { opacity: .4; } }
+  .rc-gauges { left: 50%; bottom: 10px; transform: translateX(-50%); width: min(300px, 70%); padding: 6px 9px 7px; display: grid; gap: 5px; }
+  .rc-eyebrow { font-size: 8.5px; letter-spacing: .2em; text-transform: uppercase; color: #93a6b1; }
+  .rc-g { display: grid; grid-template-columns: 24px 1fr 28px; align-items: center; gap: 7px; }
+  .rc-lbl { font-size: 9px; letter-spacing: .1em; color: #9fb2bd; }
+  .rc-val { font-size: 10px; text-align: right; color: var(--cyan); font-variant-numeric: tabular-nums; }
+  .rc-track { position: relative; height: 6px; border-radius: 5px; background: rgba(255,255,255,.08); border: 1px solid var(--hair); overflow: hidden; }
+  .rc-fill { position: absolute; top: 0; bottom: 0; left: 0; width: 0; background: var(--cyan); border-radius: 4px; box-shadow: 0 0 10px rgba(56,208,255,.5); }
+  .rc-center::after { content: ""; position: absolute; left: 50%; top: -2px; bottom: -2px; width: 1px; background: rgba(255,255,255,.55); }
+  .rc-amber .rc-fill { background: var(--amber); box-shadow: 0 0 10px rgba(242,204,12,.45); }
+  .rc__auto { position: absolute; left: 50%; top: 46%; transform: translate(-50%, -50%); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #cfe0e9; background: rgba(7,11,14,.62); border: 1px solid var(--hair); border-radius: 999px; padding: 5px 12px; white-space: nowrap; pointer-events: none; transition: opacity .3s ease; }
   .rc__auto.off { opacity: 0; }
-  .rc__ctl .pill-btn { touch-action: none; user-select: none; -webkit-user-select: none; }
+  .rc__ctl { flex-wrap: wrap; }
+  .rc__ctl .range { flex-basis: 100%; }
+  .rc__ctl .pill-btn { flex: 1; justify-content: center; touch-action: none; user-select: none; -webkit-user-select: none; }
   .rc__ctl .pill-btn.held { background: #fff; color: #000; }
-  .viz__play { position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%); background: rgba(0,0,0,.6); }
-  .viz__play:active { transform: translateX(-50%) scale(.97); }
-  .viz__play[aria-pressed="true"] { background: rgba(0,0,0,.6); color: #fff; border-color: rgba(255,255,255,.28); }
+  .pill-btn[disabled] { opacity: .5; cursor: default; }
 
   @media (max-width: 900px) {
     .project { grid-template-columns: minmax(0, 1fr); gap: 22px; }
-    .rc__ctl { flex-wrap: wrap; }
-    .rc__auto { top: auto; bottom: 26px; }
-    .rc__ctl .range { flex-basis: 100%; }
-    .rc__ctl .pill-btn { flex: 1; justify-content: center; }
     .mg__ctl { padding: 6px 10px 10px 4px; }
+    #rc .rc__view { aspect-ratio: 1 / 1; }
+    .rc-hide-s { display: none; }
+    .rc-status { min-width: 0; }
+    .rc-gear { font-size: 28px; min-width: 34px; }
   }
 
   /* 04 Reply */
@@ -516,21 +549,35 @@
         <div class="demo" data-r style="--i:2" id="rc" tabindex="0" aria-label="RC car cockpit simulation. Arrow keys steer, accelerate and brake.">
           <div class="rc__view">
             <canvas id="rc-canvas" aria-hidden="true"></canvas>
-            <div class="rc__hud mono" aria-hidden="true">
-              <span id="rc-cam">FRONT CAM</span>
-              <span>GEAR <b id="rc-gear">D</b></span>
-              <span>THR <b id="rc-thr">0%</b></span>
-              <span>BRK <b id="rc-brk">0%</b></span>
-              <span>STEER <b id="rc-steer">+0.00</b></span>
-              <span id="rc-pkt">50 Hz · packet 0</span>
+            <div class="rc__fx" aria-hidden="true"></div>
+            <div class="rchud" aria-hidden="true">
+              <div class="rc-rev" id="rc-rev">REVERSE</div>
+              <div class="rc-panel rc-cluster">
+                <div class="rc-gear" id="rc-gear">N</div>
+                <div class="rc-meta"><div class="rc-drv" id="rc-drv">neutral</div><div class="rc-sub">drive state</div></div>
+              </div>
+              <div class="rc-panel rc-status">
+                <div class="rc-row"><span class="rc-dot"></span><span>live</span><span class="rc-cam" id="rc-cam">REAR</span></div>
+                <div class="rc-row"><span class="rc-muted">wifi</span><span class="rc-wifi"><i></i><i></i><i></i><i></i></span><span class="rc-muted rc-right">simulated</span></div>
+                <div class="rc-row rc-hide-s"><span class="rc-muted">rate</span><span>50 pps</span><span class="rc-muted rc-right">lost</span><span>0</span></div>
+                <div class="rc-row rc-hide-s"><span class="rc-muted">sent</span><span id="rc-pkt">0</span></div>
+              </div>
+              <div class="rc-panel rc-gauges">
+                <div class="rc-eyebrow">Telemetry</div>
+                <div class="rc-g"><span class="rc-lbl">STR</span><div class="rc-track rc-center"><div class="rc-fill" id="rc-f-str"></div></div><span class="rc-val" id="rc-v-str">0</span></div>
+                <div class="rc-g"><span class="rc-lbl">THR</span><div class="rc-track rc-center rc-amber"><div class="rc-fill" id="rc-f-thr"></div></div><span class="rc-val" id="rc-v-thr">0</span></div>
+                <div class="rc-g"><span class="rc-lbl">BRK</span><div class="rc-track"><div class="rc-fill" id="rc-f-brk"></div></div><span class="rc-val" id="rc-v-brk">0</span></div>
+                <div class="rc-g"><span class="rc-lbl">HB</span><div class="rc-track"><div class="rc-fill" id="rc-f-hb"></div></div><span class="rc-val" id="rc-v-hb">0</span></div>
+              </div>
             </div>
-            <div class="rc__auto mono" id="rc-auto">Autopilot · touch a control to drive</div>
+            <div class="rc__auto" id="rc-auto">Autopilot · touch a control to drive</div>
           </div>
           <div class="rc__ctl">
             <label class="sr" for="rc-wheel">Steering</label>
             <input class="range" id="rc-wheel" type="range" min="-100" max="100" value="0">
             <button type="button" class="pill-btn" id="rc-brake">Brake</button>
             <button type="button" class="pill-btn" id="rc-gas">Gas</button>
+            <button type="button" class="pill-btn" id="rc-hb">Handbrake</button>
             <button type="button" class="pill-btn" id="rc-shift" aria-pressed="false">Reverse</button>
           </div>
         </div>
@@ -541,15 +588,21 @@
           <div class="mono">Desktop app · open source</div>
           <h3>Audio visualizer</h3>
           <p>A fullscreen visualizer for Windows that reacts to whatever is playing on the machine, from any app, not just one browser tab. The real app runs more than 100 MilkDrop presets.</p>
-          <p class="mono" style="margin-top:14px">A small in-page version. Press play, sound on.</p>
+          <p class="mono" style="margin-top:14px">This runs the same MilkDrop engine as the app. Press play, sound on.</p>
           <div class="links">
             <a class="pill-btn" target="_blank" rel="noopener" href="https://github.com/sky-five/audio-visualizer">Code</a>
           </div>
         </div>
         <div class="demo" data-r style="--i:2" id="viz">
+          <div class="demo__bar"><span class="dots3" aria-hidden="true"><i></i><i></i><i></i></span><span class="mono" id="viz-name">MilkDrop engine · press play</span></div>
           <div class="viz__view">
             <canvas id="viz-canvas" aria-hidden="true"></canvas>
-            <button type="button" class="pill-btn viz__play" id="viz-play" aria-pressed="false">Play a beat</button>
+            <canvas id="viz-gl" aria-hidden="true" hidden></canvas>
+          </div>
+          <div class="sim__ctl">
+            <button type="button" class="pill-btn" id="viz-play" aria-pressed="false">Play a beat</button>
+            <button type="button" class="pill-btn" id="viz-next" disabled>Next preset</button>
+            <span class="mono" id="viz-note" style="min-width:0;text-align:left;white-space:normal">Sound on</span>
           </div>
         </div>
       </article>
@@ -813,12 +866,13 @@
     slider.addEventListener("input", function () { slider.style.setProperty("--mg-value", slider.value + "%"); });
   })();
 
-  /* FPV RC car: a small cockpit simulation. It drives itself until you touch a control. */
+  /* FPV RC car: a small simulation of the real cockpit page, with the same HUD. It drives itself until you touch a control. */
   (function () {
     var box = $("#rc"), canvas = $("#rc-canvas"), ctx = canvas.getContext("2d");
-    var wheel = $("#rc-wheel"), gas = $("#rc-gas"), brake = $("#rc-brake"), shift = $("#rc-shift"), auto = $("#rc-auto");
-    var hud = { cam: $("#rc-cam"), gear: $("#rc-gear"), thr: $("#rc-thr"), brk: $("#rc-brk"), steer: $("#rc-steer"), pkt: $("#rc-pkt") };
-    var S = { pos: 0, x: 0, v: 0.5, steer: 0, thr: 0, brk: 0, gear: 1, manual: false, keys: {}, packets: 0, acc: 0 };
+    var wheel = $("#rc-wheel"), gas = $("#rc-gas"), brake = $("#rc-brake"), hbBtn = $("#rc-hb"), shift = $("#rc-shift"), auto = $("#rc-auto");
+    var hud = { gear: $("#rc-gear"), drv: $("#rc-drv"), cam: $("#rc-cam"), rev: $("#rc-rev"), pkt: $("#rc-pkt"),
+      fs: $("#rc-f-str"), ft: $("#rc-f-thr"), fb: $("#rc-f-brk"), fh: $("#rc-f-hb"), vs: $("#rc-v-str"), vt: $("#rc-v-thr"), vb: $("#rc-v-brk"), vh: $("#rc-v-hb") };
+    var S = { pos: 0, x: 0, v: 0.5, steer: 0, thr: 0, brk: 0, hb: 0, gear: 1, manual: false, keys: {}, packets: 0, acc: 0 };
     var running = false, last = 0, hudAt = 0;
     function curve(z) { return Math.sin(z * 0.0042) * 0.9 + Math.sin(z * 0.0013 + 1.7) * 0.6; }
     function takeOver() { if (!S.manual) { S.manual = true; auto.classList.add("off"); } }
@@ -829,7 +883,7 @@
       btn.addEventListener("keydown", function (e) { if (e.key === " " || e.key === "Enter") { on(e); } });
       btn.addEventListener("keyup", off); btn.addEventListener("blur", off);
     }
-    hold(gas, "thr"); hold(brake, "brk");
+    hold(gas, "thr"); hold(brake, "brk"); hold(hbBtn, "hb");
     wheel.addEventListener("input", function () { takeOver(); S.steer = Number(wheel.value) / 100; });
     function centre() { wheel.value = 0; S.steer = 0; }
     wheel.addEventListener("pointerup", centre); wheel.addEventListener("change", centre);
@@ -845,100 +899,161 @@
     box.addEventListener("blur", function () { S.keys = {}; });
 
     function step(dt) {
-      var steer = S.steer, thr = S.thr, brk = S.brk;
+      var steer = S.steer, thr = S.thr, brk = S.brk, hb = S.hb;
       if (!S.manual) { steer = Math.max(-1, Math.min(1, curve(S.pos + 20) * 0.53 * S.gear - S.x * 1.2)); thr = 0.62; }
       else {
         if (S.keys.ArrowLeft) { steer = -0.8; } if (S.keys.ArrowRight) { steer = 0.8; }
         if (S.keys.ArrowUp) { thr = 1; } if (S.keys.ArrowDown) { brk = 1; }
       }
-      S.v += (thr * 0.9 - brk * 2.4 - S.v * (Math.abs(S.x) > 1 ? 1.4 : 0.38)) * dt;
+      S.v += (thr * 0.9 - brk * 2.4 - hb * 3.4 - S.v * (Math.abs(S.x) > 1 ? 1.4 : 0.38)) * dt;
       S.v = Math.max(0, Math.min(1, S.v));
       S.pos += S.gear * S.v * dt * 230;
       S.x += (steer * 1.7 - curve(S.pos) * 0.9 * S.gear) * S.v * dt;
       S.x = Math.max(-1.5, Math.min(1.5, S.x));
       S.acc += dt; while (S.acc >= 0.02) { S.acc -= 0.02; S.packets++; }
-      S.out = { steer: steer, thr: thr, brk: brk };
+      S.out = { steer: steer, thr: thr, brk: brk, hb: hb };
     }
-    function render() {
-      var dpr = fitCanvas(canvas), W = canvas.width, H = canvas.height, hz = Math.round(H * 0.44), rear = S.gear < 0;
-      var sky = ctx.createLinearGradient(0, 0, 0, hz); sky.addColorStop(0, "#050505"); sky.addColorStop(1, "#2a2a2a");
-      ctx.fillStyle = sky; ctx.fillRect(0, 0, W, hz);
+    function render(t) {
+      var dpr = fitCanvas(canvas), W = canvas.width, H = canvas.height, hz = Math.round(H * 0.46), rear = S.gear < 0, sway = (S.out ? S.out.steer : 0) * -0.012;
+      ctx.save(); ctx.translate(W / 2, H / 2); ctx.rotate(sway); ctx.scale(1.04, 1.04); ctx.translate(-W / 2, -H / 2);
+      var sky = ctx.createLinearGradient(0, 0, 0, hz); sky.addColorStop(0, "#1c2a33"); sky.addColorStop(1, "#7f97a3");
+      ctx.fillStyle = sky; ctx.fillRect(-W * 0.1, -H * 0.1, W * 1.2, hz + H * 0.1);
+      ctx.fillStyle = "#26333a"; ctx.fillRect(-W * 0.1, hz - 6 * dpr, W * 1.2, 6 * dpr);
       var stepY = Math.max(2, Math.round(2 * dpr));
-      for (var y = H; y > hz; y -= stepY) {
-        var p = (y - hz) / (H - hz), z = 1 / p, wz = S.pos + (rear ? -1 : 1) * z * 26;
+      for (var y = H + stepY * 4; y > hz; y -= stepY) {
+        var p = Math.min(1.15, (y - hz) / (H - hz)), z = 1 / p, wz = S.pos + (rear ? -1 : 1) * z * 26;
         var band = Math.floor(wz / 14) & 1;
-        var bend = (curve(wz) - curve(S.pos)) * (1 - p) * (1 - p) * W * 0.55 * (rear ? -1 : 1);
+        var bend = (curve(wz) - curve(S.pos)) * (1 - Math.min(1, p)) * (1 - Math.min(1, p)) * W * 0.55 * (rear ? -1 : 1);
         var cx = W / 2 + bend - S.x * p * W * 0.62 * (rear ? -1 : 1), half = p * W * 0.56;
-        ctx.fillStyle = band ? "#0d0d0d" : "#111111"; ctx.fillRect(0, y - stepY, W, stepY);
-        ctx.fillStyle = band ? "#232323" : "#1e1e1e"; ctx.fillRect(cx - half, y - stepY, half * 2, stepY);
-        ctx.fillStyle = band ? "#f2f2f2" : "#6a6a6a";
-        ctx.fillRect(cx - half, y - stepY, Math.max(1, half * 0.05), stepY); ctx.fillRect(cx + half - half * 0.05, y - stepY, Math.max(1, half * 0.05), stepY);
-        if (band) { ctx.fillStyle = "#dcdcdc"; ctx.fillRect(cx - half * 0.012, y - stepY, Math.max(1, half * 0.024), stepY); }
+        ctx.fillStyle = band ? "#35502f" : "#3b5834"; ctx.fillRect(-W * 0.1, y - stepY, W * 1.2, stepY);
+        ctx.fillStyle = band ? "#4a4d50" : "#44474a"; ctx.fillRect(cx - half, y - stepY, half * 2, stepY);
+        ctx.fillStyle = band ? "#e9e9e9" : "#b23a32";
+        ctx.fillRect(cx - half - half * 0.06, y - stepY, half * 0.06, stepY); ctx.fillRect(cx + half, y - stepY, half * 0.06, stepY);
+        if (band) { ctx.fillStyle = "#e8e2c8"; ctx.fillRect(cx - half * 0.012, y - stepY, Math.max(1, half * 0.024), stepY); }
       }
-      /* Car nose and a steering indicator, like a dash camera view. */
-      var nose = ctx.createLinearGradient(0, H * 0.9, 0, H); nose.addColorStop(0, "rgba(0,0,0,0)"); nose.addColorStop(1, "rgba(0,0,0,.85)");
-      ctx.fillStyle = nose; ctx.fillRect(0, H * 0.86, W, H * 0.14);
-      var o = S.out || { steer: 0 }, bw = W * 0.3, bx = W / 2 - bw / 2, by = H - 14 * dpr;
-      ctx.fillStyle = "rgba(255,255,255,.22)"; ctx.fillRect(bx, by, bw, 3 * dpr);
-      ctx.fillStyle = "#fff"; ctx.fillRect(W / 2 + o.steer * bw / 2 - 5 * dpr, by - 4 * dpr, 10 * dpr, 11 * dpr);
+      ctx.restore();
     }
+    function centered(el, v) { var w = Math.min(1, Math.abs(v)) * 50; el.style.left = (v >= 0 ? 50 : 50 - w) + "%"; el.style.width = w + "%"; }
     function writeHud(t) {
-      if (t - hudAt < 90) { return; } hudAt = t; var o = S.out || { steer: 0, thr: 0, brk: 0 };
-      hud.cam.textContent = S.gear < 0 ? "REAR CAM" : "FRONT CAM"; hud.gear.textContent = S.gear < 0 ? "R" : "D";
-      hud.thr.textContent = Math.round(o.thr * 100) + "%"; hud.brk.textContent = Math.round(o.brk * 100) + "%";
-      hud.steer.textContent = (o.steer >= 0 ? "+" : "") + o.steer.toFixed(2); hud.pkt.textContent = "50 Hz · packet " + S.packets;
+      if (t - hudAt < 60) { return; } hudAt = t; var o = S.out || { steer: 0, thr: 0, brk: 0, hb: 0 }, rev = S.gear < 0;
+      var moving = S.v > 0.03, state = (o.brk > 0 || o.hb > 0) && moving ? "braking" : rev ? (moving || o.thr > 0 ? "reverse" : "rev-armed") : (moving || o.thr > 0 ? "forward" : "neutral");
+      hud.gear.textContent = rev ? "R" : (state === "neutral" ? "N" : "1"); hud.gear.classList.toggle("rev", rev);
+      hud.drv.textContent = state; hud.rev.classList.toggle("on", rev);
+      hud.cam.textContent = rev ? "FRONT" : "REAR"; hud.cam.classList.toggle("front", rev);
+      centered(hud.fs, o.steer); centered(hud.ft, rev ? -o.thr : o.thr);
+      hud.fb.style.width = (o.brk * 100) + "%"; hud.fh.style.width = (o.hb * 100) + "%";
+      hud.vs.textContent = Math.round(Math.abs(o.steer) * 100); hud.vt.textContent = Math.round(o.thr * 100);
+      hud.vb.textContent = Math.round(o.brk * 100); hud.vh.textContent = Math.round(o.hb * 100);
+      hud.pkt.textContent = S.packets.toLocaleString("en-CA");
     }
     function frame(t) {
       if (!running) { return; }
       var dt = Math.min(0.05, (t - last) / 1000 || 0); last = t;
-      step(dt); render(); writeHud(t); requestAnimationFrame(frame);
+      step(dt); render(t); writeHud(t); requestAnimationFrame(frame);
     }
     whenVisible(box, function (on) {
       if (on && !running && !reduce) { running = true; last = performance.now(); requestAnimationFrame(frame); }
       else if (!on) { running = false; }
     });
-    if (reduce) { step(0.016); render(); writeHud(1000); }
+    if (reduce) { step(0.016); render(0); writeHud(1000); }
   })();
 
-  /* Audio visualizer: a small synth plays a beat and the canvas reacts to the real audio signal. */
+  /* Audio visualizer: a small synth plays a groove and the real MilkDrop engine (Butterchurn, the one the app uses)
+     reacts to it. The engine loads only when you press play. If it cannot load, a simple canvas version runs instead. */
   (function () {
-    var box = $("#viz"), canvas = $("#viz-canvas"), ctx = canvas.getContext("2d"), play = $("#viz-play");
-    var audio, analyser, master, data, wave, playing = false, running = false, sched = 0, nextStep = 0, stepNo = 0, hue = 200, kick = 0;
-    function tone(type, freq, t, dur, vol, endFreq) {
-      var o = audio.createOscillator(), g = audio.createGain();
-      o.type = type; o.frequency.setValueAtTime(freq, t);
-      if (endFreq) { o.frequency.exponentialRampToValueAtTime(endFreq, t + dur); }
-      g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0008, t + dur);
-      o.connect(g); g.connect(master); o.start(t); o.stop(t + dur + 0.02);
+    var box = $("#viz"), canvas = $("#viz-canvas"), ctx = canvas.getContext("2d"), gl = $("#viz-gl");
+    var play = $("#viz-play"), next = $("#viz-next"), nameEl = $("#viz-name"), note = $("#viz-note");
+    var audio, out, analyser, duck, data, playing = false, running = false, sched = 0, nextStep = 0, stepNo = 0, hue = 200, kick = 0;
+    var engine = null, presets = null, names = [], presetAt = 0, engineState = "idle";
+    var WANT = ["Flexi, martin + geiss - dedicated to the sherwin maxawow", "martin - castle in the air", "Flexi - mindblob mix",
+      "Geiss - Cauldron - painterly 2 (saturation remix)", "flexi + amandio c - organic12-3d-2.milk", "martin - mandelbox explorer - high speed demo version",
+      "Cope - The Neverending Explosion of Red Liquid Fire", "_Geiss - Artifact 01", "Unchained - Rewop", "Zylot - Paint Spill (Music Reactive Paint Mix)"];
+
+    /* --- the groove: 112 bpm, A minor, four bars --- */
+    var CH = [[220, 261.63, 329.63, 392], [174.61, 220, 261.63, 329.63], [261.63, 329.63, 392, 493.88], [196, 246.94, 293.66, 329.63]];
+    var ROOT = [55, 43.65, 65.41, 49], ARP = [0, 2, 1, 3, 2, 3, 1, 2];
+    function env(g, t, a, peak, d) { g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(peak, t + a); g.gain.exponentialRampToValueAtTime(0.0001, t + a + d); }
+    function osc(type, f, t, dur, dest, detune) { var o = audio.createOscillator(); o.type = type; o.frequency.setValueAtTime(f, t); if (detune) { o.detune.value = detune; } o.connect(dest); o.start(t); o.stop(t + dur); return o; }
+    function noise(t, dur) { var len = Math.floor(audio.sampleRate * dur), b = audio.createBuffer(1, len, audio.sampleRate), c = b.getChannelData(0); for (var i = 0; i < len; i++) { c[i] = Math.random() * 2 - 1; } var s = audio.createBufferSource(); s.buffer = b; s.start(t); return s; }
+    function kickDrum(t) {
+      var g = audio.createGain(); g.connect(out); env(g, t, 0.004, 0.95, 0.32);
+      var o = osc("sine", 140, t, 0.4, g); o.frequency.exponentialRampToValueAtTime(44, t + 0.14);
+      duck.gain.cancelScheduledValues(t); duck.gain.setValueAtTime(0.35, t); duck.gain.linearRampToValueAtTime(1, t + 0.26);
     }
-    function hat(t) {
-      var len = Math.floor(audio.sampleRate * 0.04), buf = audio.createBuffer(1, len, audio.sampleRate), ch = buf.getChannelData(0);
-      for (var i = 0; i < len; i++) { ch[i] = (Math.random() * 2 - 1) * (1 - i / len); }
-      var s = audio.createBufferSource(), g = audio.createGain(), f = audio.createBiquadFilter();
-      f.type = "highpass"; f.frequency.value = 6500; g.gain.value = 0.22; s.buffer = buf; s.connect(f); f.connect(g); g.connect(master); s.start(t);
+    function clap(t) {
+      [0, 0.012, 0.026].forEach(function (d) { var g = audio.createGain(), f = audio.createBiquadFilter(); f.type = "bandpass"; f.frequency.value = 1500; f.Q.value = 0.9; env(g, t + d, 0.002, 0.34, 0.11); var s = noise(t + d, 0.16); s.connect(f); f.connect(g); g.connect(out); });
     }
-    var BASS = [55, 55, 65.41, 49], LEAD = [220, 261.63, 329.63, 392, 329.63, 261.63, 293.66, 196];
+    function hat(t, open, vel) {
+      var g = audio.createGain(), f = audio.createBiquadFilter(); f.type = "highpass"; f.frequency.value = 7200; env(g, t, 0.002, 0.16 * vel, open ? 0.22 : 0.045);
+      var s = noise(t, open ? 0.26 : 0.07); s.connect(f); f.connect(g); g.connect(out);
+    }
+    function bass(t, f, dur) {
+      var g = audio.createGain(), lp = audio.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.setValueAtTime(520, t); lp.frequency.exponentialRampToValueAtTime(160, t + dur); lp.Q.value = 3;
+      env(g, t, 0.006, 0.42, dur); osc("sawtooth", f, t, dur + 0.05, lp); osc("sine", f, t, dur + 0.05, g); lp.connect(g); g.connect(duck);
+    }
+    function pad(t, chord, dur) {
+      var g = audio.createGain(), lp = audio.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.setValueAtTime(700, t); lp.frequency.linearRampToValueAtTime(1500, t + dur * 0.6); lp.frequency.linearRampToValueAtTime(700, t + dur);
+      g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(0.055, t + 0.5); g.gain.setValueAtTime(0.055, t + dur - 0.35); g.gain.linearRampToValueAtTime(0.0001, t + dur);
+      chord.forEach(function (f) { osc("sawtooth", f, t, dur, lp, -7); osc("sawtooth", f, t, dur, lp, 7); });
+      lp.connect(g); g.connect(duck);
+    }
+    function pluck(t, f, vel) {
+      var g = audio.createGain(), lp = audio.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.setValueAtTime(3200, t); lp.frequency.exponentialRampToValueAtTime(500, t + 0.22);
+      env(g, t, 0.004, 0.11 * vel, 0.24); osc("triangle", f, t, 0.3, lp); osc("square", f * 2, t, 0.3, lp, 4); lp.connect(g); g.connect(duck); g.connect(echo);
+    }
+    var echo;
     function schedule() {
-      var spb = 60 / 116 / 4;
-      while (nextStep < audio.currentTime + 0.12) {
-        var s = stepNo % 16, bar = Math.floor(stepNo / 16);
-        if (s % 4 === 0) { tone("sine", 150, nextStep, 0.28, 0.9, 42); }
-        if (s % 2 === 1) { hat(nextStep); }
-        if (s % 4 === 2) { tone("sawtooth", BASS[bar % 4], nextStep, 0.22, 0.2); }
-        if (s % 2 === 0) { tone("triangle", LEAD[(stepNo / 2) % 8 | 0] * (bar % 2 ? 1.5 : 1), nextStep, 0.18, 0.11); }
+      var spb = 60 / 112 / 4;
+      while (nextStep < audio.currentTime + 0.14) {
+        var s = stepNo % 16, bar = Math.floor(stepNo / 16) % 4, t = nextStep + (s % 2 ? spb * 0.14 : 0);
+        if (s === 0) { pad(nextStep, CH[bar], spb * 16); }
+        if (s % 4 === 0) { kickDrum(t); }
+        if (s === 4 || s === 12) { clap(t); }
+        if (s % 2 === 1) { hat(t, false, s % 4 === 3 ? 1 : 0.6); } else if (s % 4 === 2) { hat(t, true, 0.7); }
+        if (s === 2 || s === 6 || s === 7 || s === 10 || s === 14) { bass(t, ROOT[bar] * (s === 7 || s === 14 ? 2 : 1), spb * 1.6); }
+        if (s % 2 === 0) { pluck(t, CH[bar][ARP[(s / 2) | 0]] * 2, s % 8 === 0 ? 1 : 0.7); }
         nextStep += spb; stepNo++;
       }
     }
+    function setupAudio() {
+      var AC = window.AudioContext || window.webkitAudioContext; if (!AC) { return false; }
+      audio = new AC();
+      var comp = audio.createDynamicsCompressor(), master = audio.createGain(); master.gain.value = 0.55;
+      out = audio.createGain(); duck = audio.createGain(); echo = audio.createDelay(1); echo.delayTime.value = 60 / 112 * 0.75;
+      var fb = audio.createGain(); fb.gain.value = 0.34; var wet = audio.createGain(); wet.gain.value = 0.3;
+      echo.connect(fb); fb.connect(echo); echo.connect(wet); wet.connect(duck);
+      duck.connect(out); out.connect(comp); comp.connect(master);
+      analyser = audio.createAnalyser(); analyser.fftSize = 256; analyser.smoothingTimeConstant = 0.78;
+      master.connect(analyser); master.connect(audio.destination); out._tap = master;
+      data = new Uint8Array(analyser.frequencyBinCount); return true;
+    }
+
+    /* --- the real engine, loaded on demand --- */
+    function loadScript(src) { return new Promise(function (ok, bad) { var s = doc.createElement("script"); s.src = src; s.onload = ok; s.onerror = bad; doc.head.appendChild(s); }); }
+    function showPreset(blend) {
+      var name = names[presetAt % names.length];
+      try { engine.loadPreset(presets[name], blend); nameEl.textContent = name; } catch (e) { presetAt++; if (presetAt < names.length * 2) { showPreset(blend); } }
+    }
+    function startEngine() {
+      if (engineState !== "idle") { return; } engineState = "loading"; note.textContent = "Loading the MilkDrop engine…";
+      Promise.all([loadScript("https://cdn.jsdelivr.net/npm/butterchurn@2.6.7/lib/butterchurn.min.js"),
+                   loadScript("https://cdn.jsdelivr.net/npm/butterchurn-presets@2.4.7/lib/butterchurnPresetsMinimal.min.js")]).then(function () {
+        var lib = window.butterchurn && (window.butterchurn.default || window.butterchurn), pack = window.butterchurnPresetsMinimal && (window.butterchurnPresetsMinimal.default || window.butterchurnPresetsMinimal);
+        presets = pack.getPresets(); var all = Object.keys(presets);
+        names = WANT.filter(function (n) { return presets[n]; }); all.forEach(function (n) { if (names.indexOf(n) < 0) { names.push(n); } });
+        gl.hidden = false; var dpr = Math.min(window.devicePixelRatio || 1, 1.5), w = Math.round(gl.clientWidth * dpr), h = Math.round(gl.clientHeight * dpr);
+        gl.width = w; gl.height = h;
+        engine = lib.createVisualizer(audio, gl, { width: w, height: h, pixelRatio: 1 });
+        engine.connectAudio(out._tap); showPreset(0);
+        canvas.hidden = true; engineState = "ready"; next.disabled = false; note.textContent = "Real MilkDrop engine · " + names.length + " presets here";
+      }).catch(function () { engineState = "failed"; gl.hidden = true; canvas.hidden = false; note.textContent = "Engine did not load, showing a simple version"; });
+    }
+    next.addEventListener("click", function () { if (engine) { presetAt++; showPreset(2.2); } });
+
     function start() {
-      if (!audio) {
-        var AC = window.AudioContext || window.webkitAudioContext; if (!AC) { play.textContent = "No audio support here"; play.disabled = true; return; }
-        audio = new AC(); master = audio.createGain(); master.gain.value = 0.3;
-        analyser = audio.createAnalyser(); analyser.fftSize = 256; analyser.smoothingTimeConstant = 0.78;
-        master.connect(analyser); analyser.connect(audio.destination);
-        data = new Uint8Array(analyser.frequencyBinCount); wave = new Uint8Array(analyser.fftSize);
-      }
-      audio.resume(); nextStep = audio.currentTime + 0.05; stepNo = 0; sched = setInterval(schedule, 25);
-      playing = true; play.setAttribute("aria-pressed", "true"); play.textContent = "Stop";
+      if (!audio && !setupAudio()) { play.textContent = "No audio support here"; play.disabled = true; return; }
+      audio.resume(); nextStep = audio.currentTime + 0.06; stepNo = 0; sched = setInterval(schedule, 25);
+      playing = true; play.setAttribute("aria-pressed", "true"); play.textContent = "Stop"; startEngine();
     }
     function stop() {
       clearInterval(sched); sched = 0; playing = false; if (audio) { audio.suspend(); }
@@ -946,36 +1061,27 @@
     }
     play.addEventListener("click", function () { if (playing) { stop(); } else { start(); } });
 
-    function frame(t) {
-      if (!running) { return; }
-      var dpr = fitCanvas(canvas), W = canvas.width, H = canvas.height, cx = W / 2, cy = H / 2, n = 56, i;
-      var bass = 0, level = 0;
-      if (playing && analyser) {
-        analyser.getByteFrequencyData(data); analyser.getByteTimeDomainData(wave);
-        for (i = 0; i < 6; i++) { bass += data[i]; } bass /= 6 * 255;
-        for (i = 0; i < n; i++) { level += data[i]; } level /= n * 255;
-      } else { bass = 0.12 + Math.sin(t / 900) * 0.05; level = 0.1; }
+    function simple(t) {
+      var dpr = fitCanvas(canvas), W = canvas.width, H = canvas.height, cx = W / 2, cy = H / 2, n = 56, i, bass = 0, level = 0;
+      if (playing && analyser) { analyser.getByteFrequencyData(data); for (i = 0; i < 6; i++) { bass += data[i]; } bass /= 6 * 255; for (i = 0; i < n; i++) { level += data[i]; } level /= n * 255; }
+      else { bass = 0.12 + Math.sin(t / 900) * 0.05; level = 0.1; }
       kick += (bass - kick) * 0.35; hue = (hue + 0.25 + level * 2.2) % 360;
-      /* Feedback: redraw the last frame slightly zoomed and rotated, then fade it. This makes the tunnel. */
-      ctx.save(); ctx.globalAlpha = 0.93; ctx.translate(cx, cy); ctx.rotate(0.004 + kick * 0.01); ctx.scale(1.018 + kick * 0.03, 1.018 + kick * 0.03); ctx.translate(-cx, -cy);
-      ctx.drawImage(canvas, 0, 0); ctx.restore();
+      ctx.save(); ctx.globalAlpha = 0.93; ctx.translate(cx, cy); ctx.rotate(0.004 + kick * 0.01); ctx.scale(1.018 + kick * 0.03, 1.018 + kick * 0.03); ctx.translate(-cx, -cy); ctx.drawImage(canvas, 0, 0); ctx.restore();
       ctx.fillStyle = "rgba(0,0,0,.12)"; ctx.fillRect(0, 0, W, H);
-      var r0 = Math.min(W, H) * (0.16 + kick * 0.1);
-      ctx.lineCap = "round"; ctx.lineWidth = Math.max(1.5, 2.2 * dpr);
+      var r0 = Math.min(W, H) * (0.16 + kick * 0.1); ctx.lineCap = "round"; ctx.lineWidth = Math.max(1.5, 2.2 * dpr);
       for (i = 0; i < n; i++) {
-        var v = playing ? data[(i * 1.4) | 0] / 255 : 0.12 + 0.1 * Math.sin(t / 500 + i * 0.5);
-        var a = (i / n) * Math.PI * 2 + t / 5000, len = r0 * 0.25 + v * Math.min(W, H) * 0.3;
+        var v = playing ? data[(i * 1.4) | 0] / 255 : 0.12 + 0.1 * Math.sin(t / 500 + i * 0.5), a = (i / n) * Math.PI * 2 + t / 5000, len = r0 * 0.25 + v * Math.min(W, H) * 0.3;
         ctx.strokeStyle = "hsl(" + ((hue + i * 3) % 360) + ",90%," + (48 + v * 30) + "%)";
         ctx.beginPath(); ctx.moveTo(cx + Math.cos(a) * r0, cy + Math.sin(a) * r0); ctx.lineTo(cx + Math.cos(a) * (r0 + len), cy + Math.sin(a) * (r0 + len)); ctx.stroke();
       }
-      if (playing) {
-        ctx.strokeStyle = "rgba(255,255,255,.85)"; ctx.lineWidth = Math.max(1, 1.4 * dpr); ctx.beginPath();
-        for (i = 0; i < wave.length; i += 2) {
-          var aa = (i / wave.length) * Math.PI * 2, rr = r0 * 0.78 + (wave[i] - 128) / 128 * r0 * 0.5;
-          if (i === 0) { ctx.moveTo(cx + Math.cos(aa) * rr, cy + Math.sin(aa) * rr); } else { ctx.lineTo(cx + Math.cos(aa) * rr, cy + Math.sin(aa) * rr); }
-        }
-        ctx.closePath(); ctx.stroke();
-      }
+    }
+    function frame(t) {
+      if (!running) { return; }
+      if (engineState === "ready") {
+        var dpr = Math.min(window.devicePixelRatio || 1, 1.5), w = Math.round(gl.clientWidth * dpr), h = Math.round(gl.clientHeight * dpr);
+        if (gl.width !== w || gl.height !== h) { gl.width = w; gl.height = h; engine.setRendererSize(w, h); }
+        try { engine.render(); } catch (e) { presetAt++; showPreset(0); }
+      } else { simple(t); }
       requestAnimationFrame(frame);
     }
     whenVisible(box, function (on) {
