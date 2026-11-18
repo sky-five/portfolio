@@ -21,7 +21,6 @@
 <link rel="icon" type="image/png" href="./resources/images/mario-icon.png">
 <script>
   document.documentElement.classList.add("js");
-  try { var t = localStorage.getItem("sky-theme"); if (t) { document.documentElement.setAttribute("data-mg-theme", t); } } catch (e) {}
 </script>
 <style>
   :root {
@@ -33,10 +32,9 @@
     --ink: #fff; --ink-2: rgba(255,255,255,.86); --ink-3: rgba(255,255,255,.78);
     --rule: rgba(255,255,255,.16);
     --pad: clamp(20px, 6vw, 88px);
-    --accent: var(--mg-primary);
+    --accent: #7dffb0;
     --mg-glass-saturate: 1;
   }
-  :root[data-mg-theme="mono"] { --accent: #7dffb0; }
   *, *::before, *::after { box-sizing: border-box; }
   html { scroll-behavior: smooth; scroll-padding-top: 90px; }
   body { margin: 0; font-family: var(--body); font-size: 17px; line-height: 1.65; color: var(--ink); background: #000; -webkit-font-smoothing: antialiased; overflow-x: clip; }
@@ -53,8 +51,6 @@
   .backdrop i { position: absolute; inset: 0; background: url('./resources/images/background-theo.jpeg') 62% 40% / cover no-repeat; filter: grayscale(1) contrast(1.16) brightness(.86); }
   .backdrop .soft { inset: -4%; filter: grayscale(1) blur(22px) brightness(.8); opacity: 0; transition: opacity 1.4s var(--enter); }
   .js .is-loading .backdrop .soft { opacity: 1; transition: none; }
-  .backdrop .tint { background: var(--mg-primary); filter: none; mix-blend-mode: color; opacity: .4; }
-  :root[data-mg-theme="mono"] .backdrop .tint { display: none; }
   .backdrop::after { content: ""; position: absolute; inset: 0; background:
     linear-gradient(90deg, rgba(0,0,0,.72) 0%, rgba(0,0,0,.38) 46%, rgba(0,0,0,.05) 100%),
     linear-gradient(0deg, rgba(0,0,0,.78) 0%, rgba(0,0,0,0) 44%),
@@ -161,26 +157,90 @@
   td { color: var(--ink-2); font-size: 16px; }
 
   /* 02 and 03: editorial rows, the figure first. */
-  .feature { display: grid; grid-template-columns: 1fr 1.05fr; gap: clamp(24px, 5vw, 72px); align-items: center; padding-bottom: clamp(36px, 6vh, 64px); }
-  .feature .stat { font-size: clamp(64px, 10vw, 140px); }
-  .facts { margin: 18px 0 22px; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 8px 22px; font-family: var(--mono); font-size: 13px; color: var(--ink-2); }
-  .facts b { color: #fff; font-weight: 500; }
-  .shot { display: block; border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,.22); box-shadow: 0 30px 80px rgba(0,0,0,.6); transition: transform .42s var(--enter); background: #fff; }
-  .shot:hover { transform: translateY(-6px); }
-  .shot img { display: block; width: 100%; height: auto; }
-  .shot span { display: flex; gap: 6px; padding: 10px 12px; background: #1b1b1b; }
-  .shot span i { width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,.25); }
   .row { display: grid; grid-template-columns: clamp(200px, 26vw, 320px) 1fr 190px; gap: clamp(18px, 4vw, 56px); align-items: start; padding: clamp(26px, 4vh, 40px) 0; border-top: 1px solid var(--rule); }
   .stat { font-family: var(--display); font-weight: 700; font-size: clamp(48px, 7vw, 96px); line-height: .9; letter-spacing: -.045em; font-variant-numeric: tabular-nums; }
   .stat small { display: block; margin-top: 12px; font-family: var(--mono); font-size: 12px; font-weight: 400; letter-spacing: .4px; line-height: 1.5; color: var(--ink-3); }
   .go { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; text-align: right; }
-  .swatches { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; margin-top: 16px; }
-  .swatches .mono { flex-basis: 100%; }
-  .swatches .swatch:first-of-type { margin-left: -10px; }
+  /* ---------- Projects with a live demo beside them ---------- */
+  .project { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr); gap: clamp(24px, 5vw, 72px); align-items: center; padding: clamp(30px, 5vh, 56px) 0; border-top: 1px solid var(--rule); }
+  .sec-head + .project { border-top: 0; padding-top: 0; }
+  .project h3 { margin-top: 10px; }
+  .facts { margin: 18px 0 4px; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 8px 22px; font-family: var(--mono); font-size: 13px; color: var(--ink-2); }
+  .facts b { color: #fff; font-weight: 500; }
+  .demo { border-radius: 18px; overflow: hidden; border: 1px solid rgba(255,255,255,.2); background: #0c0c0c; box-shadow: 0 30px 80px rgba(0,0,0,.55); }
+  .demo:focus-visible { outline: 2px solid #fff; outline-offset: 4px; border-radius: 18px; }
+  .demo__bar { display: flex; align-items: center; gap: 14px; padding: 10px 14px; background: #181818; border-bottom: 1px solid rgba(255,255,255,.1); min-height: 40px; }
+  .demo__bar .mono { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .dots3 { display: flex; gap: 6px; flex: none; }
+  .dots3 i { width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,.25); }
+  .pill-btn[aria-pressed="true"] { background: #fff; color: #000; border-color: #fff; }
+  .range { -webkit-appearance: none; appearance: none; flex: 1; min-width: 0; height: 44px; margin: 0; background: transparent; cursor: pointer; }
+  .range::-webkit-slider-runnable-track { height: 4px; border-radius: 4px; background: rgba(255,255,255,.28); }
+  .range::-moz-range-track { height: 4px; border-radius: 4px; background: rgba(255,255,255,.28); }
+  .range::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; margin-top: -9px; border-radius: 50%; background: #fff; border: 0; box-shadow: 0 2px 10px rgba(0,0,0,.5); transition: transform .16s var(--enter); }
+  .range::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: #fff; border: 0; }
+  .range:active::-webkit-slider-thumb { transform: scale(1.15); }
+
+  /* Ridgeline: a snapshot that turns into the live site */
+  .frame { position: relative; aspect-ratio: 620 / 469; background: #fff; }
+  .frame img, .frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; object-fit: cover; object-position: top left; }
+  .frame__go { position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); background: #000; border-color: #000; box-shadow: 0 10px 30px rgba(0,0,0,.4); }
+  .frame__go:hover { background: #222; }
+  .frame__go:active { transform: translateX(-50%) scale(.97); }
+  .demo__tabs { display: flex; gap: 8px; padding: 10px 12px; overflow-x: auto; background: #111; border-top: 1px solid rgba(255,255,255,.1); }
+  .demo__tabs[hidden] { display: none; }
+  .demo__tabs .pill-btn { min-height: 40px; padding: 8px 14px; }
+
+  /* SaaS World Sim: as-of-date slider on real counts */
+  .sim__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(255,255,255,.1); }
+  .sim__grid div { background: #0c0c0c; padding: 18px 20px 16px; }
+  .sim__grid b { display: block; font-family: var(--display); font-size: clamp(26px, 3vw, 40px); font-weight: 700; line-height: 1; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+  .sim__grid small { display: block; margin-top: 8px; font-family: var(--mono); font-size: 12px; color: var(--ink-3); }
+  .sim__chart { display: block; width: 100%; height: 84px; border-top: 1px solid rgba(255,255,255,.1); }
+  .sim__chart .area { fill: rgba(255,255,255,.1); }
+  .sim__chart .past { fill: none; stroke: #fff; stroke-width: 1.6; vector-effect: non-scaling-stroke; }
+  .sim__chart .future { fill: none; stroke: rgba(255,255,255,.3); stroke-width: 1.2; stroke-dasharray: 3 3; vector-effect: non-scaling-stroke; }
+  .sim__chart .mark { stroke: var(--accent); stroke-width: 1.2; vector-effect: non-scaling-stroke; }
+  .sim__ctl, .rc__ctl { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: #111; border-top: 1px solid rgba(255,255,255,.1); }
+  .sim__ctl .mono { white-space: nowrap; min-width: 92px; text-align: right; }
+
+  /* Material Glass: a contained, real component panel */
+  .mgstage { padding: clamp(18px, 3vw, 34px); min-height: 300px; display: grid; place-items: center; transition: background-color .42s ease; }
+  .mgcard { width: min(100%, 380px); border-radius: 24px; padding: 20px; display: grid; gap: 16px; color: var(--mg-on-surface); font-family: var(--body); }
+  .mgcard__row { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .mgcard__chips { justify-content: flex-start; }
+  .mgcard strong { font-family: var(--display); font-size: 18px; font-weight: 600; }
+  .mg__ctl { display: flex; align-items: center; justify-content: space-between; gap: 8px 14px; flex-wrap: wrap; padding: 6px 14px 8px 8px; background: #111; border-top: 1px solid rgba(255,255,255,.1); }
+  .swatches { display: flex; align-items: center; flex-wrap: wrap; }
   .swatch { width: 44px; height: 44px; border-radius: 50%; border: 0; background: none; padding: 0; cursor: pointer; display: grid; place-items: center; }
   .swatch::before { content: ""; width: 24px; height: 24px; border-radius: 50%; background: var(--c); border: 2px solid rgba(255,255,255,.35); transition: transform .16s var(--enter), border-color .16s ease, box-shadow .3s ease; }
   .swatch:hover::before { transform: scale(1.15); border-color: #fff; }
   .swatch[aria-pressed="true"]::before { border-color: #fff; box-shadow: 0 0 0 3px rgba(255,255,255,.22), 0 0 16px var(--c); }
+  .seg { display: flex; gap: 6px; flex-wrap: wrap; }
+  .seg .pill-btn { min-height: 40px; padding: 8px 14px; }
+
+  /* RC car cockpit and visualizer */
+  .rc__view, .viz__view { position: relative; aspect-ratio: 16 / 10; background: #000; }
+  .rc__view canvas, .viz__view canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .rc__hud { position: absolute; inset: 10px 12px auto 12px; display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 11px; color: rgba(255,255,255,.9); text-shadow: 0 1px 6px #000; pointer-events: none; }
+  .rc__hud b { font-weight: 500; color: var(--accent); }
+  .rc__hud span:first-child { color: #fff; }
+  .rc__auto { position: absolute; left: 12px; top: 44px; font-size: 11px; color: rgba(255,255,255,.85); text-shadow: 0 1px 6px #000; pointer-events: none; transition: opacity .3s ease; }
+  .rc__auto.off { opacity: 0; }
+  .rc__ctl .pill-btn { touch-action: none; user-select: none; -webkit-user-select: none; }
+  .rc__ctl .pill-btn.held { background: #fff; color: #000; }
+  .viz__play { position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%); background: rgba(0,0,0,.6); }
+  .viz__play:active { transform: translateX(-50%) scale(.97); }
+  .viz__play[aria-pressed="true"] { background: rgba(0,0,0,.6); color: #fff; border-color: rgba(255,255,255,.28); }
+
+  @media (max-width: 900px) {
+    .project { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+    .rc__ctl { flex-wrap: wrap; }
+    .rc__auto { top: auto; bottom: 26px; }
+    .rc__ctl .range { flex-basis: 100%; }
+    .rc__ctl .pill-btn { flex: 1; justify-content: center; }
+    .mg__ctl { padding: 6px 10px 10px 4px; }
+  }
 
   /* 04 Reply */
   .reply { display: grid; grid-template-columns: 1.3fr 1fr; gap: clamp(22px, 4vw, 56px); align-items: start; }
@@ -213,7 +273,7 @@
     .verdict output { white-space: normal; min-width: 0; }
     .backdrop i { background-position: 58% 30%; }
     .backdrop::after { background: linear-gradient(0deg, rgba(0,0,0,.86) 0%, rgba(0,0,0,.25) 62%, rgba(0,0,0,.35) 100%); }
-    .summary, .feature, .reply, .two { grid-template-columns: 1fr; }
+    .summary, .reply, .two { grid-template-columns: 1fr; }
     .row { grid-template-columns: 1fr; gap: 14px; }
     .go { flex-direction: row; flex-wrap: wrap; align-items: center; text-align: left; }
     .dock .nav a { padding: 12px 10px; font-size: 11px; }
@@ -234,7 +294,7 @@
 </head>
 <body class="is-loading">
 <a class="sr" href="#summary">Skip to content</a>
-<div class="backdrop" aria-hidden="true"><i></i><i class="tint"></i><i class="soft"></i></div>
+<div class="backdrop" aria-hidden="true"><i></i><i class="soft"></i></div>
 <div class="progress" aria-hidden="true"></div>
 
 <div class="dock" id="dock">
@@ -316,10 +376,10 @@
     <div class="inner">
       <div class="sec-head" data-r><span class="mono">02</span><h2 id="h-work">Data work</h2></div>
 
-      <article class="feature" data-project data-public>
+      <article class="project" data-project data-public>
         <div data-r style="--i:1">
           <div class="mono">Analytics engineering · public</div>
-          <h3 style="margin-top:10px">Ridgeline Analytics</h3>
+          <h3>Ridgeline Analytics</h3>
           <p>A full analytics platform for a made-up roofing software company, on synthetic data. Raw events go in one end, and a live executive scorecard comes out the other, rebuilt every night.</p>
           <ul class="facts">
             <li><b class="fig" data-fig="models">31</b> dbt models</li>
@@ -328,29 +388,54 @@
             <li><b>3.7x</b> conversion in the top-scored leads</li>
           </ul>
           <div class="links">
-            <a class="pill-btn" target="_blank" rel="noopener" href="https://sky-five.github.io/ridgeline-analytics/">Live scorecard</a>
-            <a class="pill-btn" target="_blank" rel="noopener" href="https://sky-five.github.io/ridgeline-analytics/metrics">Metric glossary</a>
-            <a class="pill-btn" target="_blank" rel="noopener" href="https://sky-five.github.io/ridgeline-analytics/report-reconciliation">Report reconciliation</a>
+            <a class="pill-btn" target="_blank" rel="noopener" href="https://sky-five.github.io/ridgeline-analytics/">Open full site</a>
             <a class="pill-btn" target="_blank" rel="noopener" href="https://github.com/sky-five/ridgeline-analytics">Code</a>
           </div>
         </div>
-        <a class="shot" data-r style="--i:2" target="_blank" rel="noopener" href="https://sky-five.github.io/ridgeline-analytics/" aria-label="Open the live Ridgeline executive scorecard">
-          <span aria-hidden="true"><i></i><i></i><i></i></span>
-          <img src="./resources/images/ridgeline.jpg" alt="The Ridgeline executive scorecard: weekly revenue, paying accounts, signups and a revenue-against-target chart" width="620" height="469" loading="lazy">
-        </a>
-      </article>
-
-      <article class="row" data-project data-public data-r style="--i:1">
-        <div class="stat">960K<small>rows of simulated<br>business data</small></div>
-        <div>
-          <div class="mono">Python · public</div>
-          <h3 style="margin-top:10px">SaaS World Sim</h3>
-          <p>The engine behind Ridgeline's data: a simulated software business across six source systems and 11 tables. It gives the same output on every run, and you can view the business as of any date.</p>
+        <div class="demo" data-r style="--i:2">
+          <div class="demo__bar"><span class="dots3" aria-hidden="true"><i></i><i></i><i></i></span><span class="mono" id="rl-label">Snapshot of the live scorecard</span></div>
+          <div class="frame" id="rl-frame">
+            <img src="./resources/images/ridgeline.jpg" alt="The Ridgeline executive scorecard: weekly revenue, paying accounts, signups and a revenue-against-target chart" width="620" height="469" loading="lazy">
+            <button type="button" class="pill-btn frame__go" id="rl-load">Use the live site here</button>
+          </div>
+          <div class="demo__tabs" id="rl-tabs" hidden>
+            <button type="button" class="pill-btn" data-path="" aria-pressed="true">Scorecard</button>
+            <button type="button" class="pill-btn" data-path="metrics" aria-pressed="false">Metric glossary</button>
+            <button type="button" class="pill-btn" data-path="report-reconciliation" aria-pressed="false">Reconciliation</button>
+            <button type="button" class="pill-btn" data-path="data-health" aria-pressed="false">Data health</button>
+          </div>
         </div>
-        <div class="go"><a class="pill-btn" target="_blank" rel="noopener" href="https://github.com/sky-five/saas-world-sim">Code</a></div>
       </article>
 
-      <article class="row" id="case" data-r style="--i:2">
+      <article class="project" data-project data-public>
+        <div data-r style="--i:1">
+          <div class="mono">Python · public</div>
+          <h3>SaaS World Sim</h3>
+          <p>The engine behind Ridgeline's data: a simulated software business across six source systems and 11 tables. It gives the same output on every run, and you can view the business as of any date.</p>
+          <p class="mono" style="margin-top:14px">Drag the date. These are the simulator's real counts.</p>
+          <div class="links">
+            <a class="pill-btn" target="_blank" rel="noopener" href="https://github.com/sky-five/saas-world-sim">Code</a>
+          </div>
+        </div>
+        <div class="demo" data-r style="--i:2" id="sim">
+          <div class="demo__bar"><span class="dots3" aria-hidden="true"><i></i><i></i><i></i></span><code class="mono" id="sim-code">world_as_of(date(2026, 6, 30))</code></div>
+          <div class="sim__grid">
+            <div><b id="sim-accounts">7,185</b><small>accounts</small></div>
+            <div><b id="sim-paying">683</b><small>active subscriptions</small></div>
+            <div><b id="sim-tickets">10,194</b><small>support tickets</small></div>
+            <div><b id="sim-rows">958,519</b><small>rows in 11 tables</small></div>
+          </div>
+          <svg class="sim__chart" id="sim-chart" viewBox="0 0 300 80" preserveAspectRatio="none" role="img" aria-label="Total rows over time, growing from 10 thousand to 2.3 million"></svg>
+          <div class="sim__ctl">
+            <button type="button" class="pill-btn" id="sim-play" aria-pressed="false">Play</button>
+            <label class="sr" for="sim-range">As-of date</label>
+            <input class="range" id="sim-range" type="range" min="0" max="15" step="1" value="9">
+            <span class="mono" id="sim-date">30 Jun 2026</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="row" id="case" data-r style="--i:1">
         <div class="stat"><span class="fig" data-fig="reports">15</span><small>manual reports, rebuilt<br>to run on their own</small></div>
         <div>
           <div class="mono">Automation · day job</div>
@@ -368,45 +453,102 @@
     <div class="inner">
       <div class="sec-head" data-r><span class="mono">03</span><h2 id="h-tinkering">Things I tinker with</h2></div>
 
-      <article class="row" data-project data-public data-r style="--i:1">
-        <div class="stat">60+<small>components<br>in 8 themes</small></div>
-        <div>
+      <article class="project" data-project data-public>
+        <div data-r style="--i:1">
           <div class="mono">Design system · open source</div>
-          <h3 style="margin-top:10px">Material Glass</h3>
-          <p>A design system that puts Material 3 colour roles on glass surfaces, with more than 22,000 automated contrast checks. This report runs on it, so you can restyle it.</p>
-          <div class="swatches" role="group" aria-label="Restyle this report">
-            <span class="mono">Restyle this report</span>
-            <button class="swatch" type="button" style="--c:#f2f2f2" data-theme="mono" aria-pressed="true" aria-label="Mono theme"></button>
-            <button class="swatch" type="button" style="--c:#26A69A" data-theme="sea-glass" aria-pressed="false" aria-label="Sea Glass theme"></button>
-            <button class="swatch" type="button" style="--c:#F0BE6D" data-theme="obsidian" aria-pressed="false" aria-label="Obsidian theme"></button>
-            <button class="swatch" type="button" style="--c:#FF8A70" data-theme="ember" aria-pressed="false" aria-label="Ember theme"></button>
-            <button class="swatch" type="button" style="--c:#B79BFF" data-theme="aurora" aria-pressed="false" aria-label="Aurora theme"></button>
+          <h3>Material Glass</h3>
+          <p>A design system that puts Material 3 colour roles on glass surfaces: 60+ components in 8 themes, with more than 22,000 automated contrast checks. This report is built with it.</p>
+          <p class="mono" style="margin-top:14px">The panel is the real thing. Change its theme, glass and mode.</p>
+          <div class="links">
+            <a class="pill-btn" target="_blank" rel="noopener" href="https://sky-five.github.io/material-glass/">Full demo</a>
+            <a class="pill-btn" target="_blank" rel="noopener" href="https://github.com/sky-five/material-glass">Code</a>
           </div>
         </div>
-        <div class="go">
-          <a class="pill-btn" target="_blank" rel="noopener" href="https://sky-five.github.io/material-glass/">Live demo</a>
-          <a class="pill-btn" target="_blank" rel="noopener" href="https://github.com/sky-five/material-glass">Code</a>
+        <div class="demo demo--mg" data-r style="--i:2">
+          <div class="mgstage mg-scene mg-scene--orbs" id="mg-stage" data-mg-theme="sea-glass" data-mg-mode="dark" data-mg-glass="crystal">
+            <div class="mgcard mg-glass-2">
+              <div class="mgcard__row"><strong>Glass card</strong><button class="mg-switch" type="button" role="switch" aria-checked="true" aria-label="Example switch"></button></div>
+              <label class="sr" for="mg-slider">Example slider</label>
+              <input class="mg-slider" id="mg-slider" type="range" min="0" max="100" value="62" style="--mg-value:62%">
+              <div class="mgcard__row mgcard__chips">
+                <button class="mg-chip" type="button" aria-pressed="true">Reports</button>
+                <button class="mg-chip" type="button" aria-pressed="false">Agents</button>
+                <button class="mg-chip" type="button" aria-pressed="false">Glass</button>
+              </div>
+              <div class="mgcard__row">
+                <button class="mg-btn" type="button">Save</button>
+                <button class="mg-btn mg-btn--tonal" type="button">Tonal</button>
+                <button class="mg-btn mg-btn--outlined" type="button">Outlined</button>
+              </div>
+            </div>
+          </div>
+          <div class="mg__ctl">
+            <div class="swatches" role="group" aria-label="Theme of the demo panel">
+              <button class="swatch" type="button" style="--c:#26A69A" data-theme="sea-glass" aria-pressed="true" aria-label="Sea Glass theme"></button>
+              <button class="swatch" type="button" style="--c:#7C8CF0" data-theme="prism" aria-pressed="false" aria-label="Prism theme"></button>
+              <button class="swatch" type="button" style="--c:#F0BE6D" data-theme="obsidian" aria-pressed="false" aria-label="Obsidian theme"></button>
+              <button class="swatch" type="button" style="--c:#FF8A70" data-theme="ember" aria-pressed="false" aria-label="Ember theme"></button>
+              <button class="swatch" type="button" style="--c:#B79BFF" data-theme="aurora" aria-pressed="false" aria-label="Aurora theme"></button>
+              <button class="swatch" type="button" style="--c:#e8e8e8" data-theme="mono" aria-pressed="false" aria-label="Mono theme"></button>
+            </div>
+            <div class="seg" role="group" aria-label="Glass and mode">
+              <button type="button" class="pill-btn" data-glass="frosted" aria-pressed="false">Frosted</button>
+              <button type="button" class="pill-btn" data-glass="crystal" aria-pressed="true">Crystal</button>
+              <button type="button" class="pill-btn" data-mode aria-pressed="false">Light</button>
+            </div>
+          </div>
         </div>
       </article>
 
-      <article class="row" data-project data-public data-r style="--i:2">
-        <div class="stat">50Hz<small>from steering wheel<br>to a real car</small></div>
-        <div>
+      <article class="project" data-project data-public>
+        <div data-r style="--i:1">
           <div class="mono">Hardware · open source</div>
-          <h3 style="margin-top:10px">FPV RC car</h3>
-          <p>Drive a real RC car from a sim-racing wheel and pedals, watching live video from a phone mounted in the car with a telemetry display over the picture. Shift into reverse and the camera flips.</p>
+          <h3>FPV RC car</h3>
+          <p>Drive a real RC car from a sim-racing wheel and pedals, watching live video from a phone mounted in the car with a telemetry display over the picture. The wheel position goes to the car 50 times a second. Shift into reverse and the camera flips.</p>
+          <p class="mono" style="margin-top:14px">This is a simulation of the cockpit. Take the wheel.</p>
+          <div class="links">
+            <a class="pill-btn" target="_blank" rel="noopener" href="https://github.com/sky-five/fpv-rc-car">Code</a>
+          </div>
         </div>
-        <div class="go"><a class="pill-btn" target="_blank" rel="noopener" href="https://github.com/sky-five/fpv-rc-car">Code</a></div>
+        <div class="demo" data-r style="--i:2" id="rc" tabindex="0" aria-label="RC car cockpit simulation. Arrow keys steer, accelerate and brake.">
+          <div class="rc__view">
+            <canvas id="rc-canvas" aria-hidden="true"></canvas>
+            <div class="rc__hud mono" aria-hidden="true">
+              <span id="rc-cam">FRONT CAM</span>
+              <span>GEAR <b id="rc-gear">D</b></span>
+              <span>THR <b id="rc-thr">0%</b></span>
+              <span>BRK <b id="rc-brk">0%</b></span>
+              <span>STEER <b id="rc-steer">+0.00</b></span>
+              <span id="rc-pkt">50 Hz · packet 0</span>
+            </div>
+            <div class="rc__auto mono" id="rc-auto">Autopilot · touch a control to drive</div>
+          </div>
+          <div class="rc__ctl">
+            <label class="sr" for="rc-wheel">Steering</label>
+            <input class="range" id="rc-wheel" type="range" min="-100" max="100" value="0">
+            <button type="button" class="pill-btn" id="rc-brake">Brake</button>
+            <button type="button" class="pill-btn" id="rc-gas">Gas</button>
+            <button type="button" class="pill-btn" id="rc-shift" aria-pressed="false">Reverse</button>
+          </div>
+        </div>
       </article>
 
-      <article class="row" data-project data-public data-r style="--i:3">
-        <div class="stat">100+<small>visual presets,<br>reacting to the beat</small></div>
-        <div>
+      <article class="project" data-project data-public>
+        <div data-r style="--i:1">
           <div class="mono">Desktop app · open source</div>
-          <h3 style="margin-top:10px">Audio visualizer</h3>
-          <p>A fullscreen visualizer for Windows that reacts to whatever is playing on the machine, from any app, not just one browser tab.</p>
+          <h3>Audio visualizer</h3>
+          <p>A fullscreen visualizer for Windows that reacts to whatever is playing on the machine, from any app, not just one browser tab. The real app runs more than 100 MilkDrop presets.</p>
+          <p class="mono" style="margin-top:14px">A small in-page version. Press play, sound on.</p>
+          <div class="links">
+            <a class="pill-btn" target="_blank" rel="noopener" href="https://github.com/sky-five/audio-visualizer">Code</a>
+          </div>
         </div>
-        <div class="go"><a class="pill-btn" target="_blank" rel="noopener" href="https://github.com/sky-five/audio-visualizer">Code</a></div>
+        <div class="demo" data-r style="--i:2" id="viz">
+          <div class="viz__view">
+            <canvas id="viz-canvas" aria-hidden="true"></canvas>
+            <button type="button" class="pill-btn viz__play" id="viz-play" aria-pressed="false">Play a beat</button>
+          </div>
+        </div>
       </article>
     </div>
   </section>
@@ -583,14 +725,262 @@
     $$(".sheet").forEach(function (s) { s.classList.add("is-in"); });
   }
 
-  /* Restyle this report: Material Glass themes, remembered for next time. */
-  function setTheme(name) {
-    root.setAttribute("data-mg-theme", name);
-    $$(".swatch").forEach(function (s) { s.setAttribute("aria-pressed", String(s.getAttribute("data-theme") === name)); });
-    try { localStorage.setItem("sky-theme", name); } catch (e) {}
+  /* ---------- Project demos ---------- */
+  function press(group, el) { $$("[aria-pressed]", group).forEach(function (b) { b.setAttribute("aria-pressed", String(b === el)); }); }
+  /* Run a demo's frame loop only while it is on screen and the tab is visible. */
+  function whenVisible(el, onChange) {
+    var seen = false;
+    function update() { onChange(seen && !doc.hidden); }
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (e) { seen = e[0].isIntersecting; update(); }, { threshold: 0.15 }).observe(el);
+    } else { seen = true; update(); }
+    doc.addEventListener("visibilitychange", update);
   }
-  setTheme(root.getAttribute("data-mg-theme") || "mono");
-  $$(".swatch").forEach(function (s) { s.addEventListener("click", function () { setTheme(s.getAttribute("data-theme")); }); });
+  function fitCanvas(canvas) {
+    var dpr = Math.min(window.devicePixelRatio || 1, 1.5), w = canvas.clientWidth, h = canvas.clientHeight;
+    if (canvas.width !== Math.round(w * dpr) || canvas.height !== Math.round(h * dpr)) { canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr); }
+    return dpr;
+  }
+
+  /* Ridgeline: swap the snapshot for the real site, inside the frame. */
+  (function () {
+    var frame = $("#rl-frame"), load = $("#rl-load"), tabs = $("#rl-tabs"), label = $("#rl-label"), base = "https://sky-five.github.io/ridgeline-analytics/", iframe;
+    load.addEventListener("click", function () {
+      iframe = doc.createElement("iframe");
+      iframe.title = "Ridgeline Analytics, live site"; iframe.loading = "lazy"; iframe.src = base;
+      frame.appendChild(iframe); load.remove(); tabs.hidden = false; label.textContent = "Live · sky-five.github.io/ridgeline-analytics";
+    });
+    tabs.addEventListener("click", function (e) {
+      var b = e.target.closest("[data-path]"); if (!b || !iframe) { return; }
+      press(tabs, b); iframe.src = base + b.getAttribute("data-path");
+    });
+  })();
+
+  /* SaaS World Sim: real counts from world_as_of() at each quarter end. */
+  (function () {
+    var D = [["2024-03-31",422,44,133,10052],["2024-06-30",1132,136,513,44156],["2024-09-30",1827,231,1142,103157],["2024-12-31",2333,283,1945,172104],
+             ["2025-03-31",2862,313,2850,251343],["2025-06-30",3845,420,3925,361087],["2025-09-30",4716,516,5380,500229],["2025-12-31",5383,552,6856,639128],
+             ["2026-03-31",6033,573,8359,779905],["2026-06-30",7185,683,10194,958519],["2026-09-30",8218,778,12238,1163424],["2026-12-31",9006,809,14429,1363649],
+             ["2027-03-31",9792,800,16575,1560783],["2027-06-30",11086,870,18878,1797758],["2027-09-30",12331,951,21505,2054136],["2027-12-31",13235,987,24125,2299428]];
+    var range = $("#sim-range"), play = $("#sim-play"), chart = $("#sim-chart"), code = $("#sim-code"), dateEl = $("#sim-date");
+    var out = [$("#sim-accounts"), $("#sim-paying"), $("#sim-tickets"), $("#sim-rows")], shown = [0, 0, 0, 0], raf = 0, timer = 0;
+    var MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"], max = D[D.length - 1][4];
+    function px(i) { return (i / (D.length - 1)) * 300; }
+    function py(i) { return 76 - (D[i][4] / max) * 68; }
+    function path(a, b) { var s = ""; for (var i = a; i <= b; i++) { s += (i === a ? "M" : "L") + px(i).toFixed(1) + " " + py(i).toFixed(1); } return s; }
+    function draw(i) {
+      chart.innerHTML = '<path class="area" d="' + path(0, i) + "L" + px(i).toFixed(1) + " 80L0 80Z" + '"/>' +
+        '<path class="future" d="' + path(i, D.length - 1) + '"/><path class="past" d="' + path(0, i) + '"/>' +
+        '<line class="mark" x1="' + px(i).toFixed(1) + '" x2="' + px(i).toFixed(1) + '" y1="0" y2="80"/>';
+    }
+    function set(i, instant) {
+      var d = D[i], p = d[0].split("-"), target = [d[1], d[2], d[3], d[4]], from = shown.slice(), t0 = 0;
+      code.textContent = "world_as_of(date(" + p[0] + ", " + Number(p[1]) + ", " + Number(p[2]) + "))";
+      dateEl.textContent = Number(p[2]) + " " + MONTHS[Number(p[1]) - 1] + " " + p[0];
+      range.setAttribute("aria-valuetext", dateEl.textContent); draw(i);
+      cancelAnimationFrame(raf);
+      function paint(k) { out.forEach(function (el, n) { shown[n] = from[n] + (target[n] - from[n]) * k; el.textContent = Math.round(shown[n]).toLocaleString("en-CA"); }); }
+      if (instant || reduce) { paint(1); return; }
+      raf = requestAnimationFrame(function step(t) { if (!t0) { t0 = t; } var k = Math.min(1, (t - t0) / 320); paint(1 - Math.pow(1 - k, 3)); if (k < 1) { raf = requestAnimationFrame(step); } });
+    }
+    function stop() { clearInterval(timer); timer = 0; play.setAttribute("aria-pressed", "false"); play.textContent = "Play"; }
+    range.addEventListener("input", function () { stop(); set(Number(range.value)); });
+    play.addEventListener("click", function () {
+      if (timer) { return stop(); }
+      play.setAttribute("aria-pressed", "true"); play.textContent = "Pause";
+      if (Number(range.value) >= D.length - 1) { range.value = 0; set(0); }
+      timer = setInterval(function () { var i = Number(range.value) + 1; if (i >= D.length) { return stop(); } range.value = i; set(i); }, 650);
+    });
+    whenVisible($("#sim"), function (on) { if (!on && timer) { stop(); } });
+    set(Number(range.value), true);
+  })();
+
+  /* Material Glass: the demo panel has its own theme, glass and mode. The page around it never changes. */
+  (function () {
+    var stage = $("#mg-stage"), ctl = stage.parentNode;
+    ctl.addEventListener("click", function (e) {
+      var t = e.target.closest("button"); if (!t) { return; }
+      if (t.hasAttribute("data-theme")) { stage.setAttribute("data-mg-theme", t.getAttribute("data-theme")); press(t.parentNode, t); }
+      else if (t.hasAttribute("data-glass")) { stage.setAttribute("data-mg-glass", t.getAttribute("data-glass")); $$("[data-glass]", ctl).forEach(function (b) { b.setAttribute("aria-pressed", String(b === t)); }); }
+      else if (t.hasAttribute("data-mode")) { var light = stage.getAttribute("data-mg-mode") !== "light"; stage.setAttribute("data-mg-mode", light ? "light" : "dark"); t.setAttribute("aria-pressed", String(light)); }
+      else if (t.classList.contains("mg-switch")) { t.setAttribute("aria-checked", String(t.getAttribute("aria-checked") !== "true")); }
+      else if (t.classList.contains("mg-chip")) { t.setAttribute("aria-pressed", String(t.getAttribute("aria-pressed") !== "true")); }
+    });
+    var slider = $("#mg-slider");
+    slider.addEventListener("input", function () { slider.style.setProperty("--mg-value", slider.value + "%"); });
+  })();
+
+  /* FPV RC car: a small cockpit simulation. It drives itself until you touch a control. */
+  (function () {
+    var box = $("#rc"), canvas = $("#rc-canvas"), ctx = canvas.getContext("2d");
+    var wheel = $("#rc-wheel"), gas = $("#rc-gas"), brake = $("#rc-brake"), shift = $("#rc-shift"), auto = $("#rc-auto");
+    var hud = { cam: $("#rc-cam"), gear: $("#rc-gear"), thr: $("#rc-thr"), brk: $("#rc-brk"), steer: $("#rc-steer"), pkt: $("#rc-pkt") };
+    var S = { pos: 0, x: 0, v: 0.5, steer: 0, thr: 0, brk: 0, gear: 1, manual: false, keys: {}, packets: 0, acc: 0 };
+    var running = false, last = 0, hudAt = 0;
+    function curve(z) { return Math.sin(z * 0.0042) * 0.9 + Math.sin(z * 0.0013 + 1.7) * 0.6; }
+    function takeOver() { if (!S.manual) { S.manual = true; auto.classList.add("off"); } }
+    function hold(btn, key) {
+      function on(e) { e.preventDefault(); takeOver(); S[key] = 1; btn.classList.add("held"); }
+      function off() { S[key] = 0; btn.classList.remove("held"); }
+      btn.addEventListener("pointerdown", on); btn.addEventListener("pointerup", off); btn.addEventListener("pointerleave", off); btn.addEventListener("pointercancel", off);
+      btn.addEventListener("keydown", function (e) { if (e.key === " " || e.key === "Enter") { on(e); } });
+      btn.addEventListener("keyup", off); btn.addEventListener("blur", off);
+    }
+    hold(gas, "thr"); hold(brake, "brk");
+    wheel.addEventListener("input", function () { takeOver(); S.steer = Number(wheel.value) / 100; });
+    function centre() { wheel.value = 0; S.steer = 0; }
+    wheel.addEventListener("pointerup", centre); wheel.addEventListener("change", centre);
+    shift.addEventListener("click", function () {
+      takeOver(); S.gear = -S.gear; S.v = 0;
+      shift.setAttribute("aria-pressed", String(S.gear < 0)); shift.textContent = S.gear < 0 ? "Drive" : "Reverse";
+    });
+    box.addEventListener("keydown", function (e) {
+      if (e.target !== box || ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].indexOf(e.key) < 0) { return; }
+      e.preventDefault(); takeOver(); S.keys[e.key] = true;
+    });
+    box.addEventListener("keyup", function (e) { delete S.keys[e.key]; });
+    box.addEventListener("blur", function () { S.keys = {}; });
+
+    function step(dt) {
+      var steer = S.steer, thr = S.thr, brk = S.brk;
+      if (!S.manual) { steer = Math.max(-1, Math.min(1, curve(S.pos + 20) * 0.53 * S.gear - S.x * 1.2)); thr = 0.62; }
+      else {
+        if (S.keys.ArrowLeft) { steer = -0.8; } if (S.keys.ArrowRight) { steer = 0.8; }
+        if (S.keys.ArrowUp) { thr = 1; } if (S.keys.ArrowDown) { brk = 1; }
+      }
+      S.v += (thr * 0.9 - brk * 2.4 - S.v * (Math.abs(S.x) > 1 ? 1.4 : 0.38)) * dt;
+      S.v = Math.max(0, Math.min(1, S.v));
+      S.pos += S.gear * S.v * dt * 230;
+      S.x += (steer * 1.7 - curve(S.pos) * 0.9 * S.gear) * S.v * dt;
+      S.x = Math.max(-1.5, Math.min(1.5, S.x));
+      S.acc += dt; while (S.acc >= 0.02) { S.acc -= 0.02; S.packets++; }
+      S.out = { steer: steer, thr: thr, brk: brk };
+    }
+    function render() {
+      var dpr = fitCanvas(canvas), W = canvas.width, H = canvas.height, hz = Math.round(H * 0.44), rear = S.gear < 0;
+      var sky = ctx.createLinearGradient(0, 0, 0, hz); sky.addColorStop(0, "#050505"); sky.addColorStop(1, "#2a2a2a");
+      ctx.fillStyle = sky; ctx.fillRect(0, 0, W, hz);
+      var stepY = Math.max(2, Math.round(2 * dpr));
+      for (var y = H; y > hz; y -= stepY) {
+        var p = (y - hz) / (H - hz), z = 1 / p, wz = S.pos + (rear ? -1 : 1) * z * 26;
+        var band = Math.floor(wz / 14) & 1;
+        var bend = (curve(wz) - curve(S.pos)) * (1 - p) * (1 - p) * W * 0.55 * (rear ? -1 : 1);
+        var cx = W / 2 + bend - S.x * p * W * 0.62 * (rear ? -1 : 1), half = p * W * 0.56;
+        ctx.fillStyle = band ? "#0d0d0d" : "#111111"; ctx.fillRect(0, y - stepY, W, stepY);
+        ctx.fillStyle = band ? "#232323" : "#1e1e1e"; ctx.fillRect(cx - half, y - stepY, half * 2, stepY);
+        ctx.fillStyle = band ? "#f2f2f2" : "#6a6a6a";
+        ctx.fillRect(cx - half, y - stepY, Math.max(1, half * 0.05), stepY); ctx.fillRect(cx + half - half * 0.05, y - stepY, Math.max(1, half * 0.05), stepY);
+        if (band) { ctx.fillStyle = "#dcdcdc"; ctx.fillRect(cx - half * 0.012, y - stepY, Math.max(1, half * 0.024), stepY); }
+      }
+      /* Car nose and a steering indicator, like a dash camera view. */
+      var nose = ctx.createLinearGradient(0, H * 0.9, 0, H); nose.addColorStop(0, "rgba(0,0,0,0)"); nose.addColorStop(1, "rgba(0,0,0,.85)");
+      ctx.fillStyle = nose; ctx.fillRect(0, H * 0.86, W, H * 0.14);
+      var o = S.out || { steer: 0 }, bw = W * 0.3, bx = W / 2 - bw / 2, by = H - 14 * dpr;
+      ctx.fillStyle = "rgba(255,255,255,.22)"; ctx.fillRect(bx, by, bw, 3 * dpr);
+      ctx.fillStyle = "#fff"; ctx.fillRect(W / 2 + o.steer * bw / 2 - 5 * dpr, by - 4 * dpr, 10 * dpr, 11 * dpr);
+    }
+    function writeHud(t) {
+      if (t - hudAt < 90) { return; } hudAt = t; var o = S.out || { steer: 0, thr: 0, brk: 0 };
+      hud.cam.textContent = S.gear < 0 ? "REAR CAM" : "FRONT CAM"; hud.gear.textContent = S.gear < 0 ? "R" : "D";
+      hud.thr.textContent = Math.round(o.thr * 100) + "%"; hud.brk.textContent = Math.round(o.brk * 100) + "%";
+      hud.steer.textContent = (o.steer >= 0 ? "+" : "") + o.steer.toFixed(2); hud.pkt.textContent = "50 Hz · packet " + S.packets;
+    }
+    function frame(t) {
+      if (!running) { return; }
+      var dt = Math.min(0.05, (t - last) / 1000 || 0); last = t;
+      step(dt); render(); writeHud(t); requestAnimationFrame(frame);
+    }
+    whenVisible(box, function (on) {
+      if (on && !running && !reduce) { running = true; last = performance.now(); requestAnimationFrame(frame); }
+      else if (!on) { running = false; }
+    });
+    if (reduce) { step(0.016); render(); writeHud(1000); }
+  })();
+
+  /* Audio visualizer: a small synth plays a beat and the canvas reacts to the real audio signal. */
+  (function () {
+    var box = $("#viz"), canvas = $("#viz-canvas"), ctx = canvas.getContext("2d"), play = $("#viz-play");
+    var audio, analyser, master, data, wave, playing = false, running = false, sched = 0, nextStep = 0, stepNo = 0, hue = 200, kick = 0;
+    function tone(type, freq, t, dur, vol, endFreq) {
+      var o = audio.createOscillator(), g = audio.createGain();
+      o.type = type; o.frequency.setValueAtTime(freq, t);
+      if (endFreq) { o.frequency.exponentialRampToValueAtTime(endFreq, t + dur); }
+      g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0008, t + dur);
+      o.connect(g); g.connect(master); o.start(t); o.stop(t + dur + 0.02);
+    }
+    function hat(t) {
+      var len = Math.floor(audio.sampleRate * 0.04), buf = audio.createBuffer(1, len, audio.sampleRate), ch = buf.getChannelData(0);
+      for (var i = 0; i < len; i++) { ch[i] = (Math.random() * 2 - 1) * (1 - i / len); }
+      var s = audio.createBufferSource(), g = audio.createGain(), f = audio.createBiquadFilter();
+      f.type = "highpass"; f.frequency.value = 6500; g.gain.value = 0.22; s.buffer = buf; s.connect(f); f.connect(g); g.connect(master); s.start(t);
+    }
+    var BASS = [55, 55, 65.41, 49], LEAD = [220, 261.63, 329.63, 392, 329.63, 261.63, 293.66, 196];
+    function schedule() {
+      var spb = 60 / 116 / 4;
+      while (nextStep < audio.currentTime + 0.12) {
+        var s = stepNo % 16, bar = Math.floor(stepNo / 16);
+        if (s % 4 === 0) { tone("sine", 150, nextStep, 0.28, 0.9, 42); }
+        if (s % 2 === 1) { hat(nextStep); }
+        if (s % 4 === 2) { tone("sawtooth", BASS[bar % 4], nextStep, 0.22, 0.2); }
+        if (s % 2 === 0) { tone("triangle", LEAD[(stepNo / 2) % 8 | 0] * (bar % 2 ? 1.5 : 1), nextStep, 0.18, 0.11); }
+        nextStep += spb; stepNo++;
+      }
+    }
+    function start() {
+      if (!audio) {
+        var AC = window.AudioContext || window.webkitAudioContext; if (!AC) { play.textContent = "No audio support here"; play.disabled = true; return; }
+        audio = new AC(); master = audio.createGain(); master.gain.value = 0.3;
+        analyser = audio.createAnalyser(); analyser.fftSize = 256; analyser.smoothingTimeConstant = 0.78;
+        master.connect(analyser); analyser.connect(audio.destination);
+        data = new Uint8Array(analyser.frequencyBinCount); wave = new Uint8Array(analyser.fftSize);
+      }
+      audio.resume(); nextStep = audio.currentTime + 0.05; stepNo = 0; sched = setInterval(schedule, 25);
+      playing = true; play.setAttribute("aria-pressed", "true"); play.textContent = "Stop";
+    }
+    function stop() {
+      clearInterval(sched); sched = 0; playing = false; if (audio) { audio.suspend(); }
+      play.setAttribute("aria-pressed", "false"); play.textContent = "Play a beat";
+    }
+    play.addEventListener("click", function () { if (playing) { stop(); } else { start(); } });
+
+    function frame(t) {
+      if (!running) { return; }
+      var dpr = fitCanvas(canvas), W = canvas.width, H = canvas.height, cx = W / 2, cy = H / 2, n = 56, i;
+      var bass = 0, level = 0;
+      if (playing && analyser) {
+        analyser.getByteFrequencyData(data); analyser.getByteTimeDomainData(wave);
+        for (i = 0; i < 6; i++) { bass += data[i]; } bass /= 6 * 255;
+        for (i = 0; i < n; i++) { level += data[i]; } level /= n * 255;
+      } else { bass = 0.12 + Math.sin(t / 900) * 0.05; level = 0.1; }
+      kick += (bass - kick) * 0.35; hue = (hue + 0.25 + level * 2.2) % 360;
+      /* Feedback: redraw the last frame slightly zoomed and rotated, then fade it. This makes the tunnel. */
+      ctx.save(); ctx.globalAlpha = 0.93; ctx.translate(cx, cy); ctx.rotate(0.004 + kick * 0.01); ctx.scale(1.018 + kick * 0.03, 1.018 + kick * 0.03); ctx.translate(-cx, -cy);
+      ctx.drawImage(canvas, 0, 0); ctx.restore();
+      ctx.fillStyle = "rgba(0,0,0,.12)"; ctx.fillRect(0, 0, W, H);
+      var r0 = Math.min(W, H) * (0.16 + kick * 0.1);
+      ctx.lineCap = "round"; ctx.lineWidth = Math.max(1.5, 2.2 * dpr);
+      for (i = 0; i < n; i++) {
+        var v = playing ? data[(i * 1.4) | 0] / 255 : 0.12 + 0.1 * Math.sin(t / 500 + i * 0.5);
+        var a = (i / n) * Math.PI * 2 + t / 5000, len = r0 * 0.25 + v * Math.min(W, H) * 0.3;
+        ctx.strokeStyle = "hsl(" + ((hue + i * 3) % 360) + ",90%," + (48 + v * 30) + "%)";
+        ctx.beginPath(); ctx.moveTo(cx + Math.cos(a) * r0, cy + Math.sin(a) * r0); ctx.lineTo(cx + Math.cos(a) * (r0 + len), cy + Math.sin(a) * (r0 + len)); ctx.stroke();
+      }
+      if (playing) {
+        ctx.strokeStyle = "rgba(255,255,255,.85)"; ctx.lineWidth = Math.max(1, 1.4 * dpr); ctx.beginPath();
+        for (i = 0; i < wave.length; i += 2) {
+          var aa = (i / wave.length) * Math.PI * 2, rr = r0 * 0.78 + (wave[i] - 128) / 128 * r0 * 0.5;
+          if (i === 0) { ctx.moveTo(cx + Math.cos(aa) * rr, cy + Math.sin(aa) * rr); } else { ctx.lineTo(cx + Math.cos(aa) * rr, cy + Math.sin(aa) * rr); }
+        }
+        ctx.closePath(); ctx.stroke();
+      }
+      requestAnimationFrame(frame);
+    }
+    whenVisible(box, function (on) {
+      if (on && !running && !reduce) { running = true; requestAnimationFrame(frame); }
+      else if (!on) { running = false; if (playing) { stop(); } }
+    });
+    if (reduce) { fitCanvas(canvas); ctx.fillStyle = "#000"; ctx.fillRect(0, 0, canvas.width, canvas.height); }
+  })();
 
   /* Email is stored encoded so it is not in plain text in the source. */
   var mail = atob("bW9jLmxpYW1nQHltYWhidWhz").split("").reverse().join("");
