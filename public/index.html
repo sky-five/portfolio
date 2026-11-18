@@ -604,8 +604,8 @@
 
   /* Themes: the Material Glass card and the command menu re-theme the whole page. */
   function setTheme(name) {
-    if (window.MaterialGlass) { MaterialGlass.setTheme(name, "dark", { transition: true }); }
-    else { root.setAttribute("data-mg-theme", name); }
+    root.setAttribute("data-mg-theme", name);
+    if (window.MaterialGlass) { requestAnimationFrame(MaterialGlass.refresh); }
     $$(".swatch").forEach(function (s) { s.setAttribute("aria-pressed", String(s.getAttribute("data-theme") === name)); });
   }
 
