@@ -14,45 +14,81 @@
 <meta name="theme-color" content="#000000">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="image" href="./resources/images/background-theo.jpeg">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Raleway:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sky-five/material-glass@0.2.0/material-glass.min.css">
 <script defer src="https://cdn.jsdelivr.net/gh/sky-five/material-glass@0.2.0/material-glass.min.js"></script>
 <link rel="icon" type="image/png" href="./resources/images/mario-icon.png">
 <style>
-  :root { --mg-font-display: "Montserrat", system-ui, sans-serif; --mg-font-body: "Raleway", system-ui, sans-serif; --ink: #fff; --ink-2: rgba(255,255,255,.86); --ink-3: rgba(255,255,255,.68); }
+  :root { --mg-font-display: "Montserrat", system-ui, sans-serif; --mg-font-body: "Raleway", system-ui, sans-serif; --ink: #fff; --ink-2: rgba(255,255,255,.86); --ink-3: rgba(255,255,255,.68); --ease: cubic-bezier(.2,.7,.2,1); }
   *, *::before, *::after { box-sizing: border-box; }
   html { scroll-behavior: smooth; scroll-padding-top: 96px; }
-  body { margin: 0; font-family: var(--mg-font-body); font-size: 16px; line-height: 1.75; color: var(--ink); background: #000; -webkit-font-smoothing: antialiased; }
-  a { color: inherit; }
+  body { margin: 0; font-family: var(--mg-font-body); font-size: 16px; line-height: 1.75; color: var(--ink); background: #000; -webkit-font-smoothing: antialiased; overflow-x: clip; }
+  a:not(.mg-btn) { color: inherit; }
+  a.mg-btn { text-decoration: none; }
+  button { font: inherit; color: inherit; }
   .skip { position: absolute; left: -999px; }
-  .skip:focus { left: 16px; top: 16px; z-index: 20; background: #fff; color: #000; padding: 10px 16px; border-radius: 8px; }
+  .skip:focus { left: 16px; top: 16px; z-index: 30; background: #fff; color: #000; padding: 10px 16px; border-radius: 8px; }
 
-  /* Theo stays put behind everything; the glass scrolls over him. */
-  .backdrop { position: fixed; inset: 0; z-index: -1; background: #000 url('./resources/images/background-theo.jpeg') center / cover no-repeat; filter: grayscale(1); }
-  .backdrop::after { content: ""; position: absolute; inset: 0; background: rgba(0,0,0, var(--dim, .32)); transition: background .2s linear; }
+  /* Backdrop: Theo stays put, the glass scrolls over him. */
+  .backdrop { position: fixed; inset: 0; z-index: -1; overflow: hidden; background: #000; }
+  .backdrop__img { position: absolute; inset: -3%; background: url('./resources/images/background-theo.jpeg') center / cover no-repeat; filter: grayscale(1); transform: translate3d(var(--px, 0px), var(--py, 0px), 0) scale(1.02); transition: filter 1.8s var(--ease), scale 2.4s var(--ease); will-change: transform; }
+  .backdrop__tint { position: absolute; inset: 0; background: var(--mg-primary); mix-blend-mode: color; opacity: 0; transition: opacity .8s ease; }
+  :root:not([data-mg-theme="mono"]) .backdrop__tint { opacity: .42; }
+  .backdrop__glow { position: absolute; inset: 0; background: radial-gradient(420px circle at var(--gx, 50%) var(--gy, 40%), rgba(255,255,255,.13), transparent 70%); opacity: var(--glow, 0); transition: opacity .6s ease; }
+  .backdrop__dim { position: absolute; inset: 0; background: rgba(0,0,0, var(--dim, .32)); }
+  .is-loading .backdrop__img { filter: grayscale(1) blur(22px); scale: 1.14; }
+
+  /* Scroll progress */
+  .progress { position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 20; background: #fff; transform-origin: 0 50%; transform: scaleX(var(--progress, 0)); opacity: .85; }
 
   /* Nav */
-  .top { position: fixed; top: 18px; left: 0; right: 0; z-index: 10; display: flex; justify-content: center; padding: 0 16px; }
-  .bar { display: flex; align-items: center; gap: 28px; width: 100%; max-width: 1080px; padding: 8px 10px 8px 24px; border-radius: 999px; }
+  .top { position: fixed; top: 18px; left: 0; right: 0; z-index: 10; display: flex; justify-content: center; padding: 0 16px; transition: transform .9s var(--ease), opacity .9s ease; }
+  .is-loading .top { transform: translateY(-30px); opacity: 0; }
+  .bar { display: flex; align-items: center; gap: 20px; width: 100%; max-width: 1080px; padding: 8px 10px 8px 24px; border-radius: 999px; }
   .brand { font-family: var(--mg-font-display); font-size: 22px; font-weight: 500; letter-spacing: 1px; text-decoration: none; margin-right: auto; }
-  .links { display: flex; gap: 2px; }
-  .links a { font-family: var(--mg-font-display); font-size: 11px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: var(--ink-2); text-decoration: none; padding: 11px 15px; border-radius: 999px; transition: background .25s ease, color .25s ease; }
-  .links a:hover, .links a:focus-visible, .links a.is-active { background: rgba(255,255,255,.14); color: #fff; outline: none; }
+  .links { position: relative; display: flex; gap: 2px; }
+  .links a { position: relative; z-index: 1; font-family: var(--mg-font-display); font-size: 11px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: var(--ink-2); text-decoration: none; padding: 11px 15px; border-radius: 999px; transition: color .25s ease; }
+  .links a:hover, .links a:focus-visible, .links a.is-active { color: #fff; outline: none; }
+  .links a:focus-visible { box-shadow: 0 0 0 2px rgba(255,255,255,.7); }
+  .links__pill { position: absolute; top: 0; bottom: 0; left: 0; width: 0; border-radius: 999px; background: rgba(255,255,255,.16); box-shadow: inset 0 1px 0 rgba(255,255,255,.25); transition: transform .5s var(--ease), width .5s var(--ease), opacity .3s ease; opacity: 0; pointer-events: none; }
+  .kbd { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mg-font-display); font-size: 10px; font-weight: 600; letter-spacing: 1.5px; color: var(--ink-2); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.22); border-radius: 999px; padding: 8px 12px; cursor: pointer; transition: background .25s ease; }
+  .kbd:hover, .kbd:focus-visible { background: rgba(255,255,255,.18); outline: none; }
 
   /* Hero */
   .hero { position: relative; min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 20px; }
-  .hero h1 { font-family: var(--mg-font-display); font-weight: 400; font-size: clamp(34px, 6vw, 64px); letter-spacing: 1px; margin: 0; min-height: 1.3em; text-shadow: 0 2px 30px rgba(0,0,0,.45); }
+  .hero h1 { font-family: var(--mg-font-display); font-weight: 400; font-size: clamp(34px, 6vw, 64px); letter-spacing: 1px; margin: 0; min-height: 1.3em; text-shadow: 0 2px 30px rgba(0,0,0,.45); transition: transform 1.2s var(--ease) .5s, opacity 1.2s ease .5s; }
+  .is-loading .hero h1 { transform: translateY(24px); opacity: 0; }
   .hero h1 b { font-weight: 600; }
   .caret { display: inline-block; width: 2px; height: 1em; margin-left: 4px; background: #fff; vertical-align: -0.12em; animation: blink 1s steps(1) infinite; }
   @keyframes blink { 50% { opacity: 0; } }
-  .scroll { position: absolute; bottom: 34px; font-family: var(--mg-font-display); font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--ink-2); text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 12px; }
-  .scroll::before { content: ""; width: 1px; height: 44px; background: rgba(255,255,255,.7); }
+  .scroll { position: absolute; bottom: 34px; font-family: var(--mg-font-display); font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--ink-2); text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 12px; transition: opacity 1s ease 1.4s; }
+  .is-loading .scroll { opacity: 0; }
+  .scroll::before { content: ""; width: 1px; height: 44px; background: linear-gradient(#fff, #fff) no-repeat 0 0 / 100% 40%, rgba(255,255,255,.3); animation: drip 2.2s var(--ease) infinite; }
+  @keyframes drip { 0% { background-position: 0 -30px, 0 0; } 100% { background-position: 0 50px, 0 0; } }
+
+  /* Theo is asleep. */
+  .zzz { position: absolute; left: var(--zx, 47%); top: var(--zy, 22%); pointer-events: none; font-family: var(--mg-font-display); font-weight: 600; color: rgba(255,255,255,.85); text-shadow: 0 2px 12px rgba(0,0,0,.5); transition: opacity 1s ease 2.2s; }
+  .is-loading .zzz { opacity: 0; }
+  .zzz span { position: absolute; left: 0; top: 0; opacity: 0; animation: zzz 4.5s ease-in-out infinite; }
+  .zzz span:nth-child(1) { font-size: 14px; }
+  .zzz span:nth-child(2) { font-size: 19px; animation-delay: 1.5s; }
+  .zzz span:nth-child(3) { font-size: 25px; animation-delay: 3s; }
+  @keyframes zzz { 0% { transform: translate(0, 0) rotate(-8deg); opacity: 0; } 20% { opacity: .9; } 100% { transform: translate(46px, -86px) rotate(10deg); opacity: 0; } }
+
+  /* A draggable lens over Theo. */
+  .lens { position: absolute; left: 14%; top: 56%; width: 150px; height: 150px; z-index: 2; transition: opacity 1.2s ease 1.6s; }
+  .is-loading .lens { opacity: 0; }
+  .lens-hint { position: absolute; left: 14%; top: calc(56% + 164px); width: 150px; text-align: center; font-family: var(--mg-font-display); font-size: 9px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: var(--ink-3); pointer-events: none; transition: opacity .6s ease; }
+  .is-loading .lens-hint, .lens-used .lens-hint { opacity: 0; }
 
   /* Sections */
   .section { max-width: 1080px; margin: 0 auto; padding: 70px 20px; }
   .section:last-of-type { padding-bottom: 110px; }
   .eyebrow { font-family: var(--mg-font-display); font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--ink-3); }
   h2 { font-family: var(--mg-font-display); font-size: clamp(22px, 3vw, 30px); font-weight: 600; letter-spacing: 3px; text-transform: uppercase; text-align: center; margin: 0 0 48px; text-shadow: 0 2px 24px rgba(0,0,0,.5); }
+  h2 .w { display: inline-block; opacity: 0; transform: translateY(.7em); transition: opacity .7s ease, transform .7s var(--ease); transition-delay: calc(var(--i) * 70ms); }
+  h2.is-in .w { opacity: 1; transform: none; }
   h3 { font-family: var(--mg-font-display); font-size: 18px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; line-height: 1.5; margin: 0; }
   .panel { border-radius: 24px; padding: 36px 34px; }
   p { margin: 0 0 16px; color: var(--ink-2); }
@@ -60,41 +96,58 @@
 
   /* About */
   .about { display: grid; grid-template-columns: 1.05fr 1fr; gap: 22px; align-items: stretch; }
-  .me { display: flex; align-items: center; gap: 18px; margin-bottom: 26px; }
-  .me img { width: 76px; height: 76px; border-radius: 50%; object-fit: cover; filter: grayscale(1); border: 1px solid rgba(255,255,255,.35); }
-  .me h3 { margin-bottom: 2px; }
   .about > .panel { display: flex; flex-direction: column; }
+  .me { display: flex; align-items: center; gap: 18px; margin-bottom: 26px; }
+  .me img { width: 76px; height: 76px; border-radius: 50%; object-fit: cover; filter: grayscale(1); border: 1px solid rgba(255,255,255,.35); transition: filter .6s ease, transform .6s var(--ease); }
+  .me img:hover { filter: grayscale(0); transform: scale(1.06) rotate(-2deg); }
+  .me h3 { margin-bottom: 2px; }
   .me-links { margin-top: auto; padding-top: 26px; display: flex; gap: 10px; flex-wrap: wrap; }
   .skills { list-style: none; margin: 18px 0 0; padding: 0; }
-  .skills li { display: grid; grid-template-columns: 132px 1fr; gap: 16px; padding: 13px 0; border-top: 1px solid rgba(255,255,255,.14); font-size: 15px; line-height: 1.6; color: var(--ink-2); }
-  .skills li:last-child { padding-bottom: 0; }
+  .skills li { display: grid; grid-template-columns: 132px 1fr; gap: 16px; padding: 13px 10px; margin: 0 -10px; border-top: 1px solid rgba(255,255,255,.14); border-radius: 10px; font-size: 15px; line-height: 1.6; color: var(--ink-2); transition: background .3s ease, transform .3s var(--ease); }
+  .skills li:hover { background: rgba(255,255,255,.07); transform: translateX(4px); }
   .skills b { font-family: var(--mg-font-display); font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #fff; padding-top: 2px; }
 
   /* Numbers */
   .numbers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 22px; }
   .number { border-radius: 24px; padding: 26px 30px; display: flex; align-items: baseline; gap: 16px; }
-  .number b { font-family: var(--mg-font-display); font-size: 44px; font-weight: 700; line-height: 1; letter-spacing: -1px; }
+  .number b { font-family: var(--mg-font-display); font-size: 44px; font-weight: 700; line-height: 1; letter-spacing: -1px; font-variant-numeric: tabular-nums; }
   .number span { font-family: var(--mg-font-display); font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--ink-2); line-height: 1.5; }
 
   /* Cards */
-  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
-  .card { display: flex; flex-direction: column; padding: 32px 28px 28px; border-radius: 24px; transition: transform .35s ease; }
-  .card:hover { transform: translateY(-6px); }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; perspective: 1400px; }
+  .card { display: flex; flex-direction: column; padding: 32px 28px 28px; border-radius: 24px; transform-style: preserve-3d; }
   .card .eyebrow { margin-bottom: 14px; }
   .card h3 { min-height: 3em; margin-bottom: 18px; }
-  .stat { font-family: var(--mg-font-display); font-size: 60px; font-weight: 700; line-height: 1; letter-spacing: -1.5px; }
-  .stat-label { font-family: var(--mg-font-display); font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--ink-2); margin: 12px 0 22px; min-height: 2.9em; line-height: 1.45; }
-  .card p { flex: 1; font-size: 15px; margin-bottom: 26px; }
-  .more { align-self: flex-start; font-family: var(--mg-font-display); font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; text-decoration: none; padding-bottom: 4px; border-bottom: 1px solid rgba(255,255,255,.5); transition: border-color .25s ease; }
+  .stat { font-family: var(--mg-font-display); font-size: 60px; font-weight: 700; line-height: 1; letter-spacing: -1.5px; font-variant-numeric: tabular-nums; }
+  .stat-label { font-family: var(--mg-font-display); font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--ink-2); margin: 12px 0 20px; min-height: 2.9em; line-height: 1.45; }
+  .card p { flex: 1; font-size: 15px; margin-bottom: 24px; }
+  .card__foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .more { font-family: var(--mg-font-display); font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; text-decoration: none; padding-bottom: 4px; border-bottom: 1px solid rgba(255,255,255,.5); transition: border-color .25s ease, letter-spacing .35s var(--ease); background: none; border-width: 0 0 1px; cursor: pointer; }
   .more::after { content: " \2192"; }
-  .more:hover, .more:focus-visible { border-color: #fff; outline: none; }
-  .more--muted { color: var(--ink-3); border: 0; }
+  .more:hover, .more:focus-visible { border-color: #fff; letter-spacing: 3.6px; outline: none; }
+  .more--muted { color: var(--ink-3); border: 0; cursor: default; }
   .more--muted::after { content: ""; }
+  .more--muted:hover { letter-spacing: 3px; }
+
+  /* Small visuals inside the project cards */
+  .viz { height: 58px; margin-bottom: 22px; display: flex; flex-direction: column; justify-content: center; gap: 9px; }
+  .bar-row { display: grid; grid-template-columns: 76px 1fr; align-items: center; gap: 10px; font-family: var(--mg-font-display); font-size: 9px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-3); }
+  .bar-row i { display: block; height: 8px; border-radius: 99px; background: rgba(255,255,255,.3); width: 0; transition: width 1.4s var(--ease) .3s; }
+  .bar-row:last-child i { background: #fff; box-shadow: 0 0 16px rgba(255,255,255,.5); }
+  .is-in .bar-row i { width: var(--w); }
+  .swatches { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .swatches span { font-family: var(--mg-font-display); font-size: 9px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-3); margin-right: 2px; }
+  .swatch { width: 26px; height: 26px; border-radius: 50%; border: 2px solid rgba(255,255,255,.35); background: var(--c); cursor: pointer; padding: 0; transition: transform .3s var(--ease), border-color .3s ease, box-shadow .3s ease; }
+  .swatch:hover, .swatch:focus-visible { transform: scale(1.18); outline: none; border-color: #fff; }
+  .swatch[aria-pressed="true"] { border-color: #fff; box-shadow: 0 0 0 3px rgba(255,255,255,.22), 0 0 18px var(--c); }
+  .dots { display: grid; grid-template-columns: repeat(15, 1fr); gap: 5px; align-items: center; }
+  .dots i { aspect-ratio: 1; border-radius: 50%; background: rgba(255,255,255,.16); transition: background .4s ease, box-shadow .4s ease, transform .4s var(--ease); transition-delay: calc(var(--i) * 90ms + 300ms); }
+  .is-in .dots i { background: #fff; box-shadow: 0 0 10px rgba(255,255,255,.55); transform: scale(1.08); }
 
   /* Interests */
   .cards--4 { grid-template-columns: repeat(4, 1fr); }
-  .cards--4 .card { padding: 28px 24px; }
-  .cards--4 .card:hover { transform: none; }
+  .cards--4 .card { padding: 28px 24px; transition: transform .4s var(--ease); }
+  .cards--4 .card:hover { transform: translateY(-6px); }
   .cards--4 h3 { font-size: 14px; letter-spacing: 2.5px; min-height: 0; margin-bottom: 10px; }
   .cards--4 p { margin: 0; }
 
@@ -116,9 +169,24 @@
   footer a { text-decoration: none; margin-left: 22px; color: var(--ink-2); }
   footer a:hover, footer a:focus-visible { color: #fff; }
 
+  /* Project details and command palette */
+  dialog.detail { position: fixed; inset: 0; margin: auto; height: fit-content; max-height: calc(100vh - 32px); overflow: hidden auto; scrollbar-width: none; width: min(580px, calc(100vw - 32px)); border-radius: 28px; padding: 34px 32px 28px; color: #fff; }
+  dialog.detail::backdrop, dialog.mg-command::backdrop { background: rgba(0,0,0,.55); backdrop-filter: blur(6px); }
+  dialog.detail[open] { animation: pop .45s var(--ease); }
+  @keyframes pop { from { opacity: 0; transform: translateY(18px) scale(.97); } }
+  .detail h3 { font-size: 22px; margin: 8px 0 18px; }
+  .detail dl { margin: 0 0 20px; display: grid; gap: 14px; }
+  .detail dt { font-family: var(--mg-font-display); font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--ink-3); margin-bottom: 2px; }
+  .detail dd { margin: 0; color: var(--ink-2); font-size: 15px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 26px; }
+  .chips span { font-family: var(--mg-font-display); font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; padding: 6px 12px; border-radius: 999px; border: 1px solid rgba(255,255,255,.28); background: rgba(255,255,255,.07); }
+  .detail__actions { display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; }
+  dialog.mg-command { color: #fff; position: fixed; }
+
   /* Reveal on scroll */
-  .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity .8s ease, transform .8s var(--ease); transition-delay: calc(var(--d, 0) * 110ms); }
   .reveal.is-in { opacity: 1; transform: none; }
+  .reveal.is-done { transition: transform .2s ease-out; transition-delay: 0s; }
 
   @media (max-width: 900px) {
     .about, .contact, .cards, .numbers { grid-template-columns: 1fr; }
@@ -128,6 +196,9 @@
     .panel { padding: 28px 24px; }
     .bar { gap: 6px; padding-left: 18px; }
     .links a { padding: 10px 9px; letter-spacing: 1.5px; font-size: 10px; }
+    .kbd { display: none; }
+    .lens { left: 8%; top: 64%; width: 110px; height: 110px; }
+    .lens-hint { left: 8%; top: calc(64% + 120px); width: 110px; }
   }
   @media (max-width: 520px) {
     .cards--4, .two { grid-template-columns: 1fr; }
@@ -138,38 +209,51 @@
   }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
-    .caret { animation: none; }
-    .card:hover { transform: none; }
-    .reveal { opacity: 1; transform: none; transition: none; }
+    .caret, .scroll::before, .zzz span { animation: none; }
+    .zzz { display: none; }
+    .reveal, h2 .w { opacity: 1; transform: none; transition: none; }
+    .backdrop__img, .top, .hero h1 { transition: none; }
+    .bar-row i { width: var(--w); transition: none; }
   }
 </style>
 </head>
-<body class="mg-scene">
+<body class="mg-scene is-loading">
 <a class="skip" href="#about">Skip to content</a>
-<div class="backdrop" aria-hidden="true"></div>
+<div class="backdrop" aria-hidden="true">
+  <div class="backdrop__img"></div>
+  <div class="backdrop__tint"></div>
+  <div class="backdrop__glow"></div>
+  <div class="backdrop__dim"></div>
+</div>
+<div class="progress" aria-hidden="true"></div>
 
 <header class="top">
   <nav class="bar mg-glass-3" aria-label="Main" data-mg-refract="20" data-mg-bezel="14">
     <a class="brand" href="#top">sky.</a>
     <div class="links">
+      <span class="links__pill" aria-hidden="true"></span>
       <a href="#top">Start</a>
       <a href="#about">About</a>
       <a href="#projects">Projects</a>
       <a href="#contact">Contact</a>
     </div>
+    <button class="kbd" type="button" id="open-command" aria-label="Open the command menu">Ctrl K</button>
   </nav>
 </header>
 
 <main id="top">
   <section class="hero">
+    <div class="zzz" aria-hidden="true"><span>z</span><span>z</span><span>Z</span></div>
+    <div class="mg-lens lens" data-mg-draggable data-mg-refract="30" data-mg-refract-profile="lens" data-mg-chroma="0.5" data-mg-magnify="0.22" aria-hidden="true"></div>
+    <div class="lens-hint" aria-hidden="true">Drag the lens</div>
     <h1 aria-label="I'm sky.">I'm <b id="typed"></b><span class="caret" aria-hidden="true"></span></h1>
     <a class="scroll" href="#about">Scroll down</a>
   </section>
 
   <section class="section" id="about" aria-labelledby="about-h">
-    <h2 id="about-h" class="reveal">Let's build something amazing together</h2>
+    <h2 id="about-h">Let's build something amazing together</h2>
     <div class="about">
-      <div class="panel mg-glass-2 reveal">
+      <div class="panel mg-glass-2 reveal" data-mg-specular="pointer">
         <div class="me">
           <img src="./resources/images/sky.jpg" alt="Shubham K. Yadav" width="76" height="76">
           <div>
@@ -185,7 +269,7 @@
           <a class="mg-btn mg-btn--glass" target="_blank" rel="noopener" href="https://www.linkedin.com/in/sky5">LinkedIn</a>
         </div>
       </div>
-      <div class="panel mg-glass-2 reveal">
+      <div class="panel mg-glass-2 reveal" style="--d:1" data-mg-specular="pointer">
         <div class="eyebrow">What I work with</div>
         <ul class="skills">
           <li><b>SQL</b><span>MySQL in production, every working day.</span></li>
@@ -198,54 +282,77 @@
       </div>
     </div>
     <div class="numbers">
-      <div class="number mg-glass-1 reveal"><b>7</b><span>years<br>in data</span></div>
-      <div class="number mg-glass-1 reveal"><b>3</b><span>public<br>projects</span></div>
-      <div class="number mg-glass-1 reveal"><b>2</b><span>happy<br>pets</span></div>
+      <div class="number mg-glass-1 reveal"><b data-count="7">7</b><span>years<br>in data</span></div>
+      <div class="number mg-glass-1 reveal" style="--d:1"><b data-count="3">3</b><span>public<br>projects</span></div>
+      <div class="number mg-glass-1 reveal" style="--d:2"><b data-count="2">2</b><span>happy<br>pets</span></div>
     </div>
   </section>
 
   <section class="section" id="projects" aria-labelledby="projects-h">
-    <h2 id="projects-h" class="reveal">Things I've built</h2>
+    <h2 id="projects-h">Things I've built</h2>
     <div class="cards">
-      <article class="card mg-glass-2 reveal" data-mg-specular="pointer">
+      <article class="card mg-glass-2 reveal" data-tilt data-mg-specular="pointer">
         <div class="eyebrow">Analytics engineering</div>
         <h3>Ridgeline Analytics</h3>
-        <div class="stat">3.7x</div>
+        <div class="stat"><span data-count="3.7" data-decimals="1">3.7</span>x</div>
         <div class="stat-label">conversion in the top-scored leads</div>
-        <p>A full analytics platform for a made-up roofing software company. 31 dbt models, 94 tests, 27 governed metrics and a lead-scoring model, all on synthetic data.</p>
-        <a class="more" target="_blank" rel="noopener" href="https://sky-five.github.io/ridgeline-analytics/">See the project</a>
+        <div class="viz" role="img" aria-label="Top-scored leads convert at 3.7 times the average">
+          <div class="bar-row">Average<i style="--w:27%"></i></div>
+          <div class="bar-row">Top 10%<i style="--w:100%"></i></div>
+        </div>
+        <p>A full analytics platform for a made-up roofing software company, from raw events to governed metrics and a lead-scoring model.</p>
+        <div class="card__foot">
+          <button class="more" type="button" data-open="d-ridgeline">Details</button>
+        </div>
       </article>
-      <article class="card mg-glass-2 reveal" data-mg-specular="pointer">
+      <article class="card mg-glass-2 reveal" style="--d:1" data-tilt data-mg-specular="pointer">
         <div class="eyebrow">Open source</div>
         <h3>Material Glass</h3>
-        <div class="stat">60+</div>
+        <div class="stat"><span data-count="60">60</span>+</div>
         <div class="stat-label">components in 8 themes</div>
-        <p>A design system that puts Material 3 colour roles on glass surfaces, with more than 22,000 automated contrast checks. This page is built with it.</p>
-        <a class="more" target="_blank" rel="noopener" href="https://sky-five.github.io/material-glass/">See the project</a>
+        <div class="viz">
+          <div class="swatches" role="group" aria-label="Try a theme on this page">
+            <span>Try one</span>
+            <button class="swatch" type="button" style="--c:#f2f2f2" data-theme="mono" aria-pressed="true" aria-label="Mono theme"></button>
+            <button class="swatch" type="button" style="--c:#26A69A" data-theme="sea-glass" aria-pressed="false" aria-label="Sea Glass theme"></button>
+            <button class="swatch" type="button" style="--c:#F0BE6D" data-theme="obsidian" aria-pressed="false" aria-label="Obsidian theme"></button>
+            <button class="swatch" type="button" style="--c:#FF8A70" data-theme="ember" aria-pressed="false" aria-label="Ember theme"></button>
+            <button class="swatch" type="button" style="--c:#B79BFF" data-theme="aurora" aria-pressed="false" aria-label="Aurora theme"></button>
+          </div>
+        </div>
+        <p>A design system that puts Material 3 colour roles on glass surfaces. This page is built with it, so the dots above re-theme the whole site.</p>
+        <div class="card__foot">
+          <button class="more" type="button" data-open="d-glass">Details</button>
+        </div>
       </article>
-      <article class="card mg-glass-2 reveal" data-mg-specular="pointer">
+      <article class="card mg-glass-2 reveal" style="--d:2" data-tilt data-mg-specular="pointer">
         <div class="eyebrow">Automation</div>
         <h3>Reports that run themselves</h3>
-        <div class="stat">15</div>
+        <div class="stat"><span data-count="15">15</span></div>
         <div class="stat-label">recurring reports automated</div>
-        <p>Took over a set of reports that were built by hand, rebuilt them in Python and SQL, and ran old and new side by side until the numbers matched exactly.</p>
-        <span class="more more--muted">Day job, so no link</span>
+        <div class="viz" role="img" aria-label="15 of 15 reports automated">
+          <div class="dots"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i><i style="--i:6"></i><i style="--i:7"></i><i style="--i:8"></i><i style="--i:9"></i><i style="--i:10"></i><i style="--i:11"></i><i style="--i:12"></i><i style="--i:13"></i><i style="--i:14"></i></div>
+        </div>
+        <p>Took over a set of reports that were built by hand and rebuilt them so they build, check and send themselves.</p>
+        <div class="card__foot">
+          <button class="more" type="button" data-open="d-reports">Details</button>
+        </div>
       </article>
     </div>
   </section>
 
   <section class="section" id="interests" aria-labelledby="interests-h">
-    <h2 id="interests-h" class="reveal">My interests</h2>
+    <h2 id="interests-h">My interests</h2>
     <div class="cards cards--4">
       <div class="card mg-glass-1 reveal"><h3>Analytics</h3><p>Dashboards and reporting that people actually use, built on SQL.</p></div>
-      <div class="card mg-glass-1 reveal"><h3>Automation</h3><p>Recurring reports that build and check themselves with Python.</p></div>
-      <div class="card mg-glass-1 reveal"><h3>AI agents</h3><p>Claude Code and MCP tools wired into everyday data work.</p></div>
-      <div class="card mg-glass-1 reveal"><h3>Design</h3><p>Interfaces that feel calm. Material Glass came out of this one.</p></div>
+      <div class="card mg-glass-1 reveal" style="--d:1"><h3>Automation</h3><p>Recurring reports that build and check themselves with Python.</p></div>
+      <div class="card mg-glass-1 reveal" style="--d:2"><h3>AI agents</h3><p>Claude Code and MCP tools wired into everyday data work.</p></div>
+      <div class="card mg-glass-1 reveal" style="--d:3"><h3>Design</h3><p>Interfaces that feel calm. Material Glass came out of this one.</p></div>
     </div>
   </section>
 
   <section class="section" id="contact" aria-labelledby="contact-h">
-    <h2 id="contact-h" class="reveal">Contact me</h2>
+    <h2 id="contact-h">Contact me</h2>
     <div class="contact">
       <div class="panel mg-glass-2 reveal">
         <form id="contact-form" novalidate>
@@ -262,7 +369,7 @@
           </div>
         </form>
       </div>
-      <div class="panel mg-glass-2 side reveal">
+      <div class="panel mg-glass-2 side reveal" style="--d:1" data-mg-specular="pointer">
         <h3>Feel free to contact me</h3>
         <p>Drop me a message if you would like to collaborate or have a discussion about any of your interests. 😁</p>
         <a class="mail js-mailto"><span class="js-email"></span></a>
@@ -272,73 +379,272 @@
 </main>
 
 <footer>
-  <span>© 2020–2026 Shubham K. Yadav</span>
+  <span>© 2020–2026 Shubham K. Yadav · Theo approved</span>
   <span>
     <a target="_blank" rel="noopener" href="https://github.com/sky-five">GitHub</a>
     <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/sky5">LinkedIn</a>
   </span>
 </footer>
 
+<!-- Project details -->
+<dialog class="detail mg-glass-4" id="d-ridgeline" aria-labelledby="d-ridgeline-t">
+  <div class="eyebrow">Analytics engineering</div>
+  <h3 id="d-ridgeline-t">Ridgeline Analytics</h3>
+  <dl>
+    <div><dt>What</dt><dd>An analytics platform for a made-up roofing software company, built on synthetic data: about 795,000 product events and 208,000 leads.</dd></div>
+    <div><dt>How</dt><dd>Data loads into DuckDB and Snowflake, then 31 dbt models shape it, guarded by 12 contracts and 94 tests that run on every change.</dd></div>
+    <div><dt>Result</dt><dd>27 governed metrics behind the dashboards, and a lead-scoring model whose top tenth converts at 3.7 times the average on signups it had never seen.</dd></div>
+  </dl>
+  <div class="chips"><span>dbt</span><span>DuckDB</span><span>Snowflake</span><span>dlt</span><span>MetricFlow</span><span>Evidence</span><span>GitHub Actions</span></div>
+  <form method="dialog" class="detail__actions">
+    <button class="mg-btn mg-btn--text">Close</button>
+    <a class="mg-btn" target="_blank" rel="noopener" href="https://sky-five.github.io/ridgeline-analytics/">Open the project</a>
+  </form>
+</dialog>
+<dialog class="detail mg-glass-4" id="d-glass" aria-labelledby="d-glass-t">
+  <div class="eyebrow">Open source</div>
+  <h3 id="d-glass-t">Material Glass</h3>
+  <dl>
+    <div><dt>What</dt><dd>A design system that takes Material 3's colour roles and type scale and renders them on translucent, refracting glass.</dd></div>
+    <div><dt>How</dt><dd>Plain CSS with an optional small script. Eight themes, a theme generator, and more than 60 components.</dd></div>
+    <div><dt>Result</dt><dd>Every glass surface is contrast-tested, with over 22,000 automated checks. It is MIT licensed, and this site runs on it.</dd></div>
+  </dl>
+  <div class="chips"><span>CSS</span><span>JavaScript</span><span>Design tokens</span><span>Accessibility</span><span>MIT</span></div>
+  <form method="dialog" class="detail__actions">
+    <button class="mg-btn mg-btn--text">Close</button>
+    <a class="mg-btn" target="_blank" rel="noopener" href="https://sky-five.github.io/material-glass/">Open the project</a>
+  </form>
+</dialog>
+<dialog class="detail mg-glass-4" id="d-reports" aria-labelledby="d-reports-t">
+  <div class="eyebrow">Automation</div>
+  <h3 id="d-reports-t">Reports that run themselves</h3>
+  <dl>
+    <div><dt>What</dt><dd>A set of 15 recurring reports that used to be put together by hand.</dd></div>
+    <div><dt>How</dt><dd>Rebuilt in Python and SQL on a scheduled runner. Old and new ran side by side until the numbers matched exactly.</dd></div>
+    <div><dt>Result</dt><dd>All 15 now build on a schedule and are checked every day. This one is from my day job, so there is no link.</dd></div>
+  </dl>
+  <div class="chips"><span>Python</span><span>SQL</span><span>MySQL</span><span>Scheduling</span><span>Monitoring</span></div>
+  <form method="dialog" class="detail__actions">
+    <button class="mg-btn">Close</button>
+  </form>
+</dialog>
+
+<!-- Command menu: Ctrl or Cmd + K -->
+<dialog class="mg-command mg-glass-4" data-mg-command aria-label="Command menu">
+  <label class="mg-command__search"><input placeholder="Jump to a section, open a project, change the theme" aria-label="Command"></label>
+  <div class="mg-command__list" role="listbox" aria-label="Commands">
+    <div class="mg-menu__label">Go to</div>
+    <button class="mg-menu__item" type="button" data-go="#top">Start</button>
+    <button class="mg-menu__item" type="button" data-go="#about">About me</button>
+    <button class="mg-menu__item" type="button" data-go="#projects">Projects</button>
+    <button class="mg-menu__item" type="button" data-go="#contact">Contact</button>
+    <div class="mg-menu__label">Projects</div>
+    <button class="mg-menu__item" type="button" data-open="d-ridgeline">Ridgeline Analytics</button>
+    <button class="mg-menu__item" type="button" data-open="d-glass">Material Glass</button>
+    <button class="mg-menu__item" type="button" data-open="d-reports">Reports that run themselves</button>
+    <div class="mg-menu__label">Theme</div>
+    <button class="mg-menu__item" type="button" data-theme="mono">Theme: Mono</button>
+    <button class="mg-menu__item" type="button" data-theme="sea-glass">Theme: Sea Glass</button>
+    <button class="mg-menu__item" type="button" data-theme="obsidian">Theme: Obsidian</button>
+    <button class="mg-menu__item" type="button" data-theme="ember">Theme: Ember</button>
+    <button class="mg-menu__item" type="button" data-theme="aurora">Theme: Aurora</button>
+    <div class="mg-menu__label">Elsewhere</div>
+    <button class="mg-menu__item" type="button" data-href="https://github.com/sky-five">GitHub</button>
+    <button class="mg-menu__item" type="button" data-href="https://www.linkedin.com/in/sky5">LinkedIn</button>
+  </div>
+</dialog>
+
 <script>
 (function () {
+  var doc = document, root = doc.documentElement, body = doc.body;
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  function $(s, el) { return (el || doc).querySelector(s); }
+  function $$(s, el) { return Array.prototype.slice.call((el || doc).querySelectorAll(s)); }
 
-  // Typing intro, same lines as before.
+  /* Intro: Theo comes into focus, then the page settles. */
+  function loaded() { body.classList.remove("is-loading"); }
+  if (reduce) { loaded(); }
+  else {
+    var img = new Image();
+    img.onload = img.onerror = function () { requestAnimationFrame(function () { setTimeout(loaded, 120); }); };
+    img.src = "./resources/images/background-theo.jpeg";
+    setTimeout(loaded, 2500);
+  }
+
+  /* Typing intro, same lines as before. */
   var lines = ["sky.", "Shubham K. Yadav.", "a BI developer.", "a tinkerer.", "Theo's human."];
-  var typed = document.getElementById("typed");
+  var typed = doc.getElementById("typed");
   if (reduce) { typed.textContent = lines[0]; }
   else {
-    var i = 0, n = 0, del = false;
-    (function tick() {
-      var t = lines[i];
+    var li = 0, n = 0, del = false;
+    setTimeout(function tick() {
+      var t = lines[li];
       n += del ? -1 : 1;
       typed.textContent = t.slice(0, n);
       var wait = del ? 45 : 95;
       if (!del && n === t.length) { del = true; wait = 1900; }
-      else if (del && n === 0) { del = false; i = (i + 1) % lines.length; wait = 400; }
+      else if (del && n === 0) { del = false; li = (li + 1) % lines.length; wait = 400; }
       setTimeout(tick, wait);
-    })();
+    }, 900);
   }
 
-  // Theo dims a little as you scroll into the content, so text stays easy to read.
-  var backdrop = document.querySelector(".backdrop");
-  function dim() {
+  /* Keep the "zzz" over Theo's head whatever the screen shape (the photo is 1263 x 947, cover-fitted). */
+  var zzz = $(".zzz");
+  function placeZzz() {
+    var vw = window.innerWidth, vh = window.innerHeight, iw = 1263, ih = 947;
+    var s = Math.max(vw / iw, vh / ih) * 1.06;
+    var x = (vw - iw * s) / 2 + 0.5 * iw * s, y = (vh - ih * s) / 2 + 0.25 * ih * s;
+    zzz.style.setProperty("--zx", Math.max(20, Math.min(vw - 80, x)) + "px");
+    zzz.style.setProperty("--zy", Math.max(90, y) + "px");
+  }
+  placeZzz(); window.addEventListener("resize", placeZzz);
+
+  /* Scroll: progress line, and Theo dims a little so text stays easy to read. */
+  var backdrop = $(".backdrop"), progress = $(".progress");
+  function onScroll() {
+    var max = root.scrollHeight - window.innerHeight;
+    progress.style.setProperty("--progress", max > 0 ? (window.scrollY / max).toFixed(4) : 0);
     var p = Math.min(1, window.scrollY / (window.innerHeight * 0.8));
     backdrop.style.setProperty("--dim", (0.32 + p * 0.3).toFixed(3));
   }
-  window.addEventListener("scroll", dim, { passive: true }); dim();
+  window.addEventListener("scroll", onScroll, { passive: true }); onScroll();
 
-  // Reveal on scroll and highlight the current nav link.
-  var reveals = document.querySelectorAll(".reveal");
+  /* Pointer: a soft light follows the cursor and Theo shifts slightly (desktop only). */
+  if (finePointer && !reduce) {
+    var tx = 0.5, ty = 0.4, cx = 0.5, cy = 0.4, running = false;
+    function frame() {
+      cx += (tx - cx) * 0.08; cy += (ty - cy) * 0.08;
+      backdrop.style.setProperty("--gx", (cx * 100).toFixed(2) + "%");
+      backdrop.style.setProperty("--gy", (cy * 100).toFixed(2) + "%");
+      backdrop.style.setProperty("--px", ((0.5 - cx) * 22).toFixed(2) + "px");
+      backdrop.style.setProperty("--py", ((0.5 - cy) * 16).toFixed(2) + "px");
+      if (Math.abs(tx - cx) + Math.abs(ty - cy) > 0.0015) { requestAnimationFrame(frame); } else { running = false; }
+    }
+    window.addEventListener("pointermove", function (e) {
+      tx = e.clientX / window.innerWidth; ty = e.clientY / window.innerHeight;
+      backdrop.style.setProperty("--glow", 1);
+      if (!running) { running = true; requestAnimationFrame(frame); }
+    }, { passive: true });
+    doc.addEventListener("pointerleave", function () { backdrop.style.setProperty("--glow", 0); });
+
+    /* Project cards tilt toward the pointer. */
+    $$("[data-tilt]").forEach(function (card) {
+      card.addEventListener("pointermove", function (e) {
+        if (!card.classList.contains("is-done")) { return; }
+        var r = card.getBoundingClientRect();
+        var x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+        card.style.transform = "rotateY(" + (x * 7).toFixed(2) + "deg) rotateX(" + (-y * 7).toFixed(2) + "deg) translateY(-6px)";
+      });
+      card.addEventListener("pointerleave", function () { card.style.transform = ""; });
+    });
+  }
+  var lens = $(".lens");
+  lens.addEventListener("pointerdown", function () { body.classList.add("lens-used"); });
+
+  /* Headings reveal word by word. */
+  $$("main h2").forEach(function (h) {
+    var words = h.textContent.trim().split(/\s+/);
+    h.setAttribute("aria-label", h.textContent.trim());
+    h.innerHTML = words.map(function (w, i) { return '<span class="w" aria-hidden="true" style="--i:' + i + '">' + w + "</span>"; }).join(" ");
+  });
+
+  /* Numbers count up once. */
+  function countUp(el) {
+    var end = parseFloat(el.getAttribute("data-count")), dec = parseInt(el.getAttribute("data-decimals") || "0", 10);
+    if (reduce) { return; }
+    var t0 = null, dur = 1300;
+    el.textContent = (0).toFixed(dec);
+    requestAnimationFrame(function step(t) {
+      if (!t0) { t0 = t; }
+      var p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      el.textContent = (end * e).toFixed(dec);
+      if (p < 1) { requestAnimationFrame(step); } else { el.textContent = end.toFixed(dec); }
+    });
+  }
+
+  /* Reveal on scroll, and move the nav pill to the current section. */
+  var reveals = $$(".reveal, main h2");
+  function show(el) {
+    el.classList.add("is-in");
+    $$("[data-count]", el).forEach(countUp);
+    setTimeout(function () { el.classList.add("is-done"); }, 1400);
+  }
+  var links = {}, pill = $(".links__pill");
+  $$(".links a").forEach(function (a) { links[a.getAttribute("href").slice(1)] = a; });
+  function setActive(id) {
+    var a = links[id]; if (!a) { return; }
+    Object.keys(links).forEach(function (k) { links[k].classList.toggle("is-active", k === id); });
+    if (a.offsetParent === null) { pill.style.opacity = 0; return; }
+    pill.style.opacity = 1;
+    pill.style.width = a.offsetWidth + "px";
+    pill.style.transform = "translateX(" + a.offsetLeft + "px)";
+  }
   if (!("IntersectionObserver" in window) || reduce) {
-    reveals.forEach(function (el) { el.classList.add("is-in"); });
+    reveals.forEach(function (el) { el.classList.add("is-in", "is-done"); });
   } else {
     var ro = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("is-in"); ro.unobserve(e.target); } });
+      entries.forEach(function (e) { if (e.isIntersecting) { show(e.target); ro.unobserve(e.target); } });
     }, { rootMargin: "0px 0px -8% 0px" });
     reveals.forEach(function (el) { ro.observe(el); });
-
-    var links = {};
-    document.querySelectorAll(".links a").forEach(function (a) { links[a.getAttribute("href").slice(1)] = a; });
+  }
+  if ("IntersectionObserver" in window) {
+    var current = "top";
     var so = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
         if (!e.isIntersecting) { return; }
-        var id = e.target.id === "interests" ? "projects" : (e.target.id || "top");
-        Object.keys(links).forEach(function (k) { links[k].classList.toggle("is-active", k === id); });
+        current = e.target.id === "interests" ? "projects" : (e.target.id || "top");
+        setActive(current);
       });
     }, { rootMargin: "-45% 0px -50% 0px" });
-    document.querySelectorAll(".hero, .section").forEach(function (s) { so.observe(s); });
+    $$(".hero, .section").forEach(function (s) { so.observe(s); });
+    window.addEventListener("resize", function () { setActive(current); });
+    if (doc.fonts && doc.fonts.ready) { doc.fonts.ready.then(function () { setActive(current); }); }
   }
 
-  // Email is stored encoded so it is not in plain text in the source.
-  var mail = atob("bW9jLmxpYW1nQHltYWhidWhz").split("").reverse().join("");
-  document.querySelectorAll(".js-email").forEach(function (el) { el.textContent = mail; });
-  document.querySelectorAll(".js-mailto").forEach(function (el) { el.href = "mailto:" + mail; });
+  /* Themes: the Material Glass card and the command menu re-theme the whole page. */
+  function setTheme(name) {
+    if (window.MaterialGlass) { MaterialGlass.setTheme(name, "dark", { transition: true }); }
+    else { root.setAttribute("data-mg-theme", name); }
+    $$(".swatch").forEach(function (s) { s.setAttribute("aria-pressed", String(s.getAttribute("data-theme") === name)); });
+  }
 
-  // Contact form: posts to Web3Forms. The access key is public by design.
-  var form = document.getElementById("contact-form");
-  var status = document.getElementById("form-status");
-  var button = form.querySelector("button");
+  /* Project details, command menu and their actions. */
+  var command = $("dialog.mg-command");
+  function closeCommand() { if (command.open) { command.close(); } }
+  doc.addEventListener("click", function (e) {
+    var t = e.target.closest("[data-open], [data-theme], [data-go], [data-href], #open-command");
+    if (!t) {
+      if (e.target.matches && e.target.matches("dialog.detail")) { e.target.close(); }
+      return;
+    }
+    if (t.id === "open-command") { if (!command.open) { command.showModal(); } return; }
+    if (t.hasAttribute("data-theme")) { setTheme(t.getAttribute("data-theme")); closeCommand(); return; }
+    if (t.hasAttribute("data-open")) {
+      closeCommand();
+      var d = doc.getElementById(t.getAttribute("data-open"));
+      if (d && !d.open) { d.showModal(); }
+      return;
+    }
+    if (t.hasAttribute("data-go")) {
+      closeCommand();
+      var target = $(t.getAttribute("data-go"));
+      if (target) { target.scrollIntoView({ behavior: reduce ? "auto" : "smooth" }); }
+      return;
+    }
+    if (t.hasAttribute("data-href")) { closeCommand(); window.open(t.getAttribute("data-href"), "_blank", "noopener"); }
+  });
+  if (/Mac|iPhone|iPad/.test(navigator.platform || "")) { $("#open-command").textContent = "⌘ K"; }
+
+  /* Email is stored encoded so it is not in plain text in the source. */
+  var mail = atob("bW9jLmxpYW1nQHltYWhidWhz").split("").reverse().join("");
+  $$(".js-email").forEach(function (el) { el.textContent = mail; });
+  $$(".js-mailto").forEach(function (el) { el.href = "mailto:" + mail; });
+
+  /* Contact form: posts to Web3Forms. The access key is public by design. */
+  var form = doc.getElementById("contact-form");
+  var status = doc.getElementById("form-status");
+  var button = $("button", form);
   function say(text, isError) { status.textContent = text; status.classList.toggle("is-error", !!isError); }
   form.addEventListener("submit", function (ev) {
     ev.preventDefault();
@@ -360,6 +666,7 @@
     }).then(function (r) { return r.json(); }).then(function (d) {
       if (!d.success) { throw new Error("failed"); }
       form.reset(); say("Your message was sent!");
+      if (window.MaterialGlass && MaterialGlass.toast) { MaterialGlass.toast("Message sent. Thank you!"); }
     }).catch(function () {
       say("Could not send the message. Please use the e-mail address instead.", true);
     }).then(function () { button.disabled = false; });
