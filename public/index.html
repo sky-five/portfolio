@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en" data-mg-theme="mono" data-mg-mode="dark" data-mg-glass="crystal" data-mg-shape="soft" data-mg-motion="calm">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shubham K. Yadav (sky)</title>
+<meta name="description" content="BI developer with 7 years in data. Reporting, automation and AI agents that check the numbers.">
+<meta property="og:title" content="Shubham K. Yadav (sky)">
+<meta property="og:description" content="BI developer with 7 years in data. Reporting, automation and AI agents that check the numbers.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sky-five.web.app/">
+<meta property="og:image" content="https://sky-five.web.app/resources/images/background-theo.jpeg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#000000">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Raleway:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sky-five/material-glass@0.2.0/material-glass.min.css">
+<script defer src="https://cdn.jsdelivr.net/gh/sky-five/material-glass@0.2.0/material-glass.min.js"></script>
+<link rel="icon" type="image/png" href="./resources/images/mario-icon.png">
+<style>
+  :root { --mg-font-display: "Montserrat", system-ui, sans-serif; --mg-font-body: "Raleway", system-ui, sans-serif; --ink: #fff; --ink-2: rgba(255,255,255,.86); --ink-3: rgba(255,255,255,.68); }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 96px; }
+  body { margin: 0; font-family: var(--mg-font-body); font-size: 16px; line-height: 1.75; color: var(--ink); background: #000; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  .skip { position: absolute; left: -999px; }
+  .skip:focus { left: 16px; top: 16px; z-index: 20; background: #fff; color: #000; padding: 10px 16px; border-radius: 8px; }
+
+  /* Theo stays put behind everything; the glass scrolls over him. */
+  .backdrop { position: fixed; inset: 0; z-index: -1; background: #000 url('./resources/images/background-theo.jpeg') center / cover no-repeat; filter: grayscale(1); }
+  .backdrop::after { content: ""; position: absolute; inset: 0; background: rgba(0,0,0, var(--dim, .32)); transition: background .2s linear; }
+
+  /* Nav */
+  .top { position: fixed; top: 18px; left: 0; right: 0; z-index: 10; display: flex; justify-content: center; padding: 0 16px; }
+  .bar { display: flex; align-items: center; gap: 28px; width: 100%; max-width: 1080px; padding: 8px 10px 8px 24px; border-radius: 999px; }
+  .brand { font-family: var(--mg-font-display); font-size: 22px; font-weight: 500; letter-spacing: 1px; text-decoration: none; margin-right: auto; }
+  .links { display: flex; gap: 2px; }
+  .links a { font-family: var(--mg-font-display); font-size: 11px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: var(--ink-2); text-decoration: none; padding: 11px 15px; border-radius: 999px; transition: background .25s ease, color .25s ease; }
+  .links a:hover, .links a:focus-visible, .links a.is-active { background: rgba(255,255,255,.14); color: #fff; outline: none; }
+
+  /* Hero */
+  .hero { position: relative; min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 20px; }
+  .hero h1 { font-family: var(--mg-font-display); font-weight: 400; font-size: clamp(34px, 6vw, 64px); letter-spacing: 1px; margin: 0; min-height: 1.3em; text-shadow: 0 2px 30px rgba(0,0,0,.45); }
+  .hero h1 b { font-weight: 600; }
+  .caret { display: inline-block; width: 2px; height: 1em; margin-left: 4px; background: #fff; vertical-align: -0.12em; animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .scroll { position: absolute; bottom: 34px; font-family: var(--mg-font-display); font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--ink-2); text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .scroll::before { content: ""; width: 1px; height: 44px; background: rgba(255,255,255,.7); }
+
+  /* Sections */
+  .section { max-width: 1080px; margin: 0 auto; padding: 70px 20px; }
+  .section:last-of-type { padding-bottom: 110px; }
+  .eyebrow { font-family: var(--mg-font-display); font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--ink-3); }
+  h2 { font-family: var(--mg-font-display); font-size: clamp(22px, 3vw, 30px); font-weight: 600; letter-spacing: 3px; text-transform: uppercase; text-align: center; margin: 0 0 48px; text-shadow: 0 2px 24px rgba(0,0,0,.5); }
+  h3 { font-family: var(--mg-font-display); font-size: 18px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; line-height: 1.5; margin: 0; }
+  .panel { border-radius: 24px; padding: 36px 34px; }
+  p { margin: 0 0 16px; color: var(--ink-2); }
+  p:last-child { margin-bottom: 0; }
+
+  /* About */
+  .about { display: grid; grid-template-columns: 1.05fr 1fr; gap: 22px; align-items: stretch; }
+  .me { display: flex; align-items: center; gap: 18px; margin-bottom: 26px; }
+  .me img { width: 76px; height: 76px; border-radius: 50%; object-fit: cover; filter: grayscale(1); border: 1px solid rgba(255,255,255,.35); }
+  .me h3 { margin-bottom: 2px; }
+  .about > .panel { display: flex; flex-direction: column; }
+  .me-links { margin-top: auto; padding-top: 26px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .skills { list-style: none; margin: 18px 0 0; padding: 0; }
+  .skills li { display: grid; grid-template-columns: 132px 1fr; gap: 16px; padding: 13px 0; border-top: 1px solid rgba(255,255,255,.14); font-size: 15px; line-height: 1.6; color: var(--ink-2); }
+  .skills li:last-child { padding-bottom: 0; }
+  .skills b { font-family: var(--mg-font-display); font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #fff; padding-top: 2px; }
+
+  /* Numbers */
+  .numbers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 22px; }
+  .number { border-radius: 24px; padding: 26px 30px; display: flex; align-items: baseline; gap: 16px; }
+  .number b { font-family: var(--mg-font-display); font-size: 44px; font-weight: 700; line-height: 1; letter-spacing: -1px; }
+  .number span { font-family: var(--mg-font-display); font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--ink-2); line-height: 1.5; }
+
+  /* Cards */
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .card { display: flex; flex-direction: column; padding: 32px 28px 28px; border-radius: 24px; transition: transform .35s ease; }
+  .card:hover { transform: translateY(-6px); }
+  .card .eyebrow { margin-bottom: 14px; }
+  .card h3 { min-height: 3em; margin-bottom: 18px; }
+  .stat { font-family: var(--mg-font-display); font-size: 60px; font-weight: 700; line-height: 1; letter-spacing: -1.5px; }
+  .stat-label { font-family: var(--mg-font-display); font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--ink-2); margin: 12px 0 22px; min-height: 2.9em; line-height: 1.45; }
+  .card p { flex: 1; font-size: 15px; margin-bottom: 26px; }
+  .more { align-self: flex-start; font-family: var(--mg-font-display); font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; text-decoration: none; padding-bottom: 4px; border-bottom: 1px solid rgba(255,255,255,.5); transition: border-color .25s ease; }
+  .more::after { content: " \2192"; }
+  .more:hover, .more:focus-visible { border-color: #fff; outline: none; }
+  .more--muted { color: var(--ink-3); border: 0; }
+  .more--muted::after { content: ""; }
+
+  /* Interests */
+  .cards--4 { grid-template-columns: repeat(4, 1fr); }
+  .cards--4 .card { padding: 28px 24px; }
+  .cards--4 .card:hover { transform: none; }
+  .cards--4 h3 { font-size: 14px; letter-spacing: 2.5px; min-height: 0; margin-bottom: 10px; }
+  .cards--4 p { margin: 0; }
+
+  /* Contact */
+  .contact { display: grid; grid-template-columns: 1.3fr 1fr; gap: 22px; align-items: stretch; }
+  form { display: grid; gap: 16px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .mg-field { width: 100%; }
+  textarea.mg-field__input { resize: vertical; min-height: 120px; }
+  .hp { position: absolute; left: -9999px; }
+  .send { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+  .status { font-size: 14px; color: var(--ink-2); min-height: 1.5em; }
+  .status.is-error { color: #ffb4ab; }
+  .side { display: flex; flex-direction: column; }
+  .side h3 { margin-bottom: 14px; }
+  .side .mail { margin-top: auto; padding-top: 24px; font-family: var(--mg-font-display); font-size: 14px; letter-spacing: 1px; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,.4); align-self: flex-start; padding-bottom: 3px; }
+
+  footer { max-width: 1080px; margin: 0 auto; padding: 0 20px 40px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-family: var(--mg-font-display); font-size: 10px; font-weight: 500; letter-spacing: 2.5px; text-transform: uppercase; color: var(--ink-3); }
+  footer a { text-decoration: none; margin-left: 22px; color: var(--ink-2); }
+  footer a:hover, footer a:focus-visible { color: #fff; }
+
+  /* Reveal on scroll */
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.is-in { opacity: 1; transform: none; }
+
+  @media (max-width: 900px) {
+    .about, .contact, .cards, .numbers { grid-template-columns: 1fr; }
+    .cards--4 { grid-template-columns: 1fr 1fr; }
+    .card h3, .stat-label { min-height: 0; }
+    .section { padding: 48px 16px; }
+    .panel { padding: 28px 24px; }
+    .bar { gap: 6px; padding-left: 18px; }
+    .links a { padding: 10px 9px; letter-spacing: 1.5px; font-size: 10px; }
+  }
+  @media (max-width: 520px) {
+    .cards--4, .two { grid-template-columns: 1fr; }
+    .skills li { grid-template-columns: 1fr; gap: 2px; }
+    .links a[href="#top"] { display: none; }
+    footer { justify-content: center; text-align: center; }
+    footer a:first-child { margin-left: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .caret { animation: none; }
+    .card:hover { transform: none; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+  }
+</style>
+</head>
+<body class="mg-scene">
+<a class="skip" href="#about">Skip to content</a>
+<div class="backdrop" aria-hidden="true"></div>
+
+<header class="top">
+  <nav class="bar mg-glass-3" aria-label="Main" data-mg-refract="20" data-mg-bezel="14">
+    <a class="brand" href="#top">sky.</a>
+    <div class="links">
+      <a href="#top">Start</a>
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <h1 aria-label="I'm sky.">I'm <b id="typed"></b><span class="caret" aria-hidden="true"></span></h1>
+    <a class="scroll" href="#about">Scroll down</a>
+  </section>
+
+  <section class="section" id="about" aria-labelledby="about-h">
+    <h2 id="about-h" class="reveal">Let's build something amazing together</h2>
+    <div class="about">
+      <div class="panel mg-glass-2 reveal">
+        <div class="me">
+          <img src="./resources/images/sky.jpg" alt="Shubham K. Yadav" width="76" height="76">
+          <div>
+            <h3>Shubham K. Yadav</h3>
+            <div class="eyebrow">BI developer · Ontario, Canada</div>
+          </div>
+        </div>
+        <p>I am a BI developer with 7 years in data. I build the reports people check every morning, automate the ones that used to be done by hand, and set up AI agents that double-check the numbers.</p>
+        <p>I started out building Android apps, and I still like making small tools for fun.</p>
+        <p>The sleeping beauty in my background is Theo. My dogs are my support system and I love them a lot.</p>
+        <div class="me-links">
+          <a class="mg-btn mg-btn--glass" target="_blank" rel="noopener" href="https://github.com/sky-five">GitHub</a>
+          <a class="mg-btn mg-btn--glass" target="_blank" rel="noopener" href="https://www.linkedin.com/in/sky5">LinkedIn</a>
+        </div>
+      </div>
+      <div class="panel mg-glass-2 reveal">
+        <div class="eyebrow">What I work with</div>
+        <ul class="skills">
+          <li><b>SQL</b><span>MySQL in production, every working day.</span></li>
+          <li><b>BI dashboards</b><span>Tableau and Power BI reporting, used from the front line to leadership.</span></li>
+          <li><b>Python</b><span>Automation and ETL that runs on a schedule.</span></li>
+          <li><b>AI agents</b><span>Claude Code and MCP tools that check reports each morning.</span></li>
+          <li><b>Data stack</b><span>dbt, DuckDB and Snowflake, shown end to end in a public project.</span></li>
+          <li><b>Excel</b><span>Advanced. Still the fastest way to answer some questions.</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="numbers">
+      <div class="number mg-glass-1 reveal"><b>7</b><span>years<br>in data</span></div>
+      <div class="number mg-glass-1 reveal"><b>3</b><span>public<br>projects</span></div>
+      <div class="number mg-glass-1 reveal"><b>2</b><span>happy<br>pets</span></div>
+    </div>
+  </section>
+
+  <section class="section" id="projects" aria-labelledby="projects-h">
+    <h2 id="projects-h" class="reveal">Things I've built</h2>
+    <div class="cards">
+      <article class="card mg-glass-2 reveal" data-mg-specular="pointer">
+        <div class="eyebrow">Analytics engineering</div>
+        <h3>Ridgeline Analytics</h3>
+        <div class="stat">3.7x</div>
+        <div class="stat-label">conversion in the top-scored leads</div>
+        <p>A full analytics platform for a made-up roofing software company. 31 dbt models, 94 tests, 27 governed metrics and a lead-scoring model, all on synthetic data.</p>
+        <a class="more" target="_blank" rel="noopener" href="https://sky-five.github.io/ridgeline-analytics/">See the project</a>
+      </article>
+      <article class="card mg-glass-2 reveal" data-mg-specular="pointer">
+        <div class="eyebrow">Open source</div>
+        <h3>Material Glass</h3>
+        <div class="stat">60+</div>
+        <div class="stat-label">components in 8 themes</div>
+        <p>A design system that puts Material 3 colour roles on glass surfaces, with more than 22,000 automated contrast checks. This page is built with it.</p>
+        <a class="more" target="_blank" rel="noopener" href="https://sky-five.github.io/material-glass/">See the project</a>
+      </article>
+      <article class="card mg-glass-2 reveal" data-mg-specular="pointer">
+        <div class="eyebrow">Automation</div>
+        <h3>Reports that run themselves</h3>
+        <div class="stat">15</div>
+        <div class="stat-label">recurring reports automated</div>
+        <p>Took over a set of reports that were built by hand, rebuilt them in Python and SQL, and ran old and new side by side until the numbers matched exactly.</p>
+        <span class="more more--muted">Day job, so no link</span>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="interests" aria-labelledby="interests-h">
+    <h2 id="interests-h" class="reveal">My interests</h2>
+    <div class="cards cards--4">
+      <div class="card mg-glass-1 reveal"><h3>Analytics</h3><p>Dashboards and reporting that people actually use, built on SQL.</p></div>
+      <div class="card mg-glass-1 reveal"><h3>Automation</h3><p>Recurring reports that build and check themselves with Python.</p></div>
+      <div class="card mg-glass-1 reveal"><h3>AI agents</h3><p>Claude Code and MCP tools wired into everyday data work.</p></div>
+      <div class="card mg-glass-1 reveal"><h3>Design</h3><p>Interfaces that feel calm. Material Glass came out of this one.</p></div>
+    </div>
+  </section>
+
+  <section class="section" id="contact" aria-labelledby="contact-h">
+    <h2 id="contact-h" class="reveal">Contact me</h2>
+    <div class="contact">
+      <div class="panel mg-glass-2 reveal">
+        <form id="contact-form" novalidate>
+          <div class="two">
+            <label class="mg-field"><span class="mg-field__label">Name</span><input class="mg-field__input" type="text" name="name" autocomplete="name" required></label>
+            <label class="mg-field"><span class="mg-field__label">E-mail</span><input class="mg-field__input" type="email" name="email" autocomplete="email" required></label>
+          </div>
+          <label class="mg-field"><span class="mg-field__label">Subject (optional)</span><input class="mg-field__input" type="text" name="subject"></label>
+          <label class="mg-field"><span class="mg-field__label">Message</span><textarea class="mg-field__input" name="message" rows="5" required></textarea></label>
+          <input class="hp" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <div class="send">
+            <button class="mg-btn mg-btn--lg" type="submit">Send message</button>
+            <span class="status" id="form-status" role="status" aria-live="polite"></span>
+          </div>
+        </form>
+      </div>
+      <div class="panel mg-glass-2 side reveal">
+        <h3>Feel free to contact me</h3>
+        <p>Drop me a message if you would like to collaborate or have a discussion about any of your interests. 😁</p>
+        <a class="mail js-mailto"><span class="js-email"></span></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>© 2020–2026 Shubham K. Yadav</span>
+  <span>
+    <a target="_blank" rel="noopener" href="https://github.com/sky-five">GitHub</a>
+    <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/sky5">LinkedIn</a>
+  </span>
+</footer>
+
+<script>
+(function () {
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Typing intro, same lines as before.
+  var lines = ["sky.", "Shubham K. Yadav.", "a BI developer.", "a tinkerer.", "Theo's human."];
+  var typed = document.getElementById("typed");
+  if (reduce) { typed.textContent = lines[0]; }
+  else {
+    var i = 0, n = 0, del = false;
+    (function tick() {
+      var t = lines[i];
+      n += del ? -1 : 1;
+      typed.textContent = t.slice(0, n);
+      var wait = del ? 45 : 95;
+      if (!del && n === t.length) { del = true; wait = 1900; }
+      else if (del && n === 0) { del = false; i = (i + 1) % lines.length; wait = 400; }
+      setTimeout(tick, wait);
+    })();
+  }
+
+  // Theo dims a little as you scroll into the content, so text stays easy to read.
+  var backdrop = document.querySelector(".backdrop");
+  function dim() {
+    var p = Math.min(1, window.scrollY / (window.innerHeight * 0.8));
+    backdrop.style.setProperty("--dim", (0.32 + p * 0.3).toFixed(3));
+  }
+  window.addEventListener("scroll", dim, { passive: true }); dim();
+
+  // Reveal on scroll and highlight the current nav link.
+  var reveals = document.querySelectorAll(".reveal");
+  if (!("IntersectionObserver" in window) || reduce) {
+    reveals.forEach(function (el) { el.classList.add("is-in"); });
+  } else {
+    var ro = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("is-in"); ro.unobserve(e.target); } });
+    }, { rootMargin: "0px 0px -8% 0px" });
+    reveals.forEach(function (el) { ro.observe(el); });
+
+    var links = {};
+    document.querySelectorAll(".links a").forEach(function (a) { links[a.getAttribute("href").slice(1)] = a; });
+    var so = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) { return; }
+        var id = e.target.id === "interests" ? "projects" : (e.target.id || "top");
+        Object.keys(links).forEach(function (k) { links[k].classList.toggle("is-active", k === id); });
+      });
+    }, { rootMargin: "-45% 0px -50% 0px" });
+    document.querySelectorAll(".hero, .section").forEach(function (s) { so.observe(s); });
+  }
+
+  // Email is stored encoded so it is not in plain text in the source.
+  var mail = atob("bW9jLmxpYW1nQHltYWhidWhz").split("").reverse().join("");
+  document.querySelectorAll(".js-email").forEach(function (el) { el.textContent = mail; });
+  document.querySelectorAll(".js-mailto").forEach(function (el) { el.href = "mailto:" + mail; });
+
+  // Contact form: posts to Web3Forms. The access key is public by design.
+  var form = document.getElementById("contact-form");
+  var status = document.getElementById("form-status");
+  var button = form.querySelector("button");
+  function say(text, isError) { status.textContent = text; status.classList.toggle("is-error", !!isError); }
+  form.addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var f = form.elements;
+    var name = f.name.value.trim(), email = f.email.value.trim(), message = f.message.value.trim();
+    if (!name || !email || !message) { return say("Please fill in your name, e-mail and message.", true); }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { return say("That e-mail address does not look right.", true); }
+    if (f.botcheck.checked) { return; }
+    button.disabled = true; say("Sending…");
+    fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify({
+        access_key: "85f8c0c3-dc0c-44df-b6c2-cbfb5cf354de",
+        from_name: "sky-five.web.app",
+        subject: f.subject.value.trim() || "Message from sky-five.web.app",
+        name: name, email: email, message: message
+      })
+    }).then(function (r) { return r.json(); }).then(function (d) {
+      if (!d.success) { throw new Error("failed"); }
+      form.reset(); say("Your message was sent!");
+    }).catch(function () {
+      say("Could not send the message. Please use the e-mail address instead.", true);
+    }).then(function () { button.disabled = false; });
+  });
+})();
+</script>
+</body>
+</html>
